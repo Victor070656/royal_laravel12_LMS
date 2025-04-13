@@ -43,6 +43,15 @@ new #[Layout('components.layouts.auth')] class extends Component {
         $user = Auth::user();
         // dd($user->isInstructor());
 
+        if ($user->status == '0') {
+            Auth::guard('web')->logout();
+
+            Session::invalidate();
+            Session::regenerateToken();
+
+            $this->redirectIntended(route('home', absolute: false), navigate: true);;
+        }
+
         // check role
         if ($user->isAdmin()) {
             $this->redirectIntended(route('manager.index', absolute: false), navigate: true);

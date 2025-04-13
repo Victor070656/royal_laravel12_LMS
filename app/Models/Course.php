@@ -21,6 +21,16 @@ class Course extends Model
 
     public function sections()
     {
-        $this->hasMany(Section::class);
+        return $this->hasMany(Section::class);
+    }
+
+    public function review()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }

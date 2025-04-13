@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\Category;
 use App\Models\Course;
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -14,19 +15,45 @@ class AdminController extends Controller
 {
     public function index()
     {
-        return view('backend.admin.dashboard');
+        $userCount = User::all()->count();
+        $courseCount = Course::all()->count();
+        $orderCount = Order::all()->count();
+        $orderAmount = Order::sum("amount");
+        $users = User::latest()->whereNot("id", "=", auth()->user()->id)->limit(5)->get();
+        return view('backend.admin.dashboard',  [
+            "userCount" => $userCount,
+            "courseCount" => $courseCount,
+            "orderCount" => $orderCount,
+            "orderAmount" => $orderAmount,
+            "users" => $users
+        ]);
     }
 
     public function getUsers(Request $request)
     {
-        $users = User::latest()->paginate(2);
+        $id = auth()->user()->id;
+        $users = User::latest()->whereNot("id", "=", $id)->paginate(2);
 
         return view("backend.admin.view-users", [
             "users" => $users
         ]);
     }
 
-    public function activateUser(User $user) {}
+    public function activateUser(User $user)
+    {
+        $user->status = "1";
+        $user->save();
+
+        return redirect()->route("manager.users.view")->with("success", "User Activated");
+    }
+
+    public function deactivateUser(User $user)
+    {
+        $user->status = "0";
+        $user->save();
+
+        return redirect()->route("manager.users.view")->with("success", "User Deactivated");
+    }
 
     public function addCourse()
     {
@@ -75,6 +102,32 @@ class AdminController extends Controller
         }
     }
 
+    public function updateCourse(Request $request, Course $course)
+    {
+        // dd($request);
+        $validated = $request->validate([
+            "course_name" => "required|string|max:255",
+            "category_id" => "required",
+            "short_desc" => "required|string",
+            "long_desc" => "string",
+            "scheme" => "required|string",
+            "requirements" => "required|string",
+            "duration" => "required|string",
+            "thumbnail" => "image|max:2048",
+            "price" => "required|numeric"
+        ]);
+
+        $validated["thumbnail"] = $request->file("thumbnail") ? $request->file("thumbnail")->store("thumbnails", "public") : $course->thumbnail;
+
+        $update = $course->update($validated);
+
+        if ($update) {
+            return redirect()->route("manager.courses")->with("success", "Course updated successfully");
+        } else {
+            return redirect()->route("manager.courses")->with("error", "Course update failed");
+        }
+    }
+
     public function getCategories()
     {
         $categories = Category::latest()->get();
@@ -117,5 +170,46 @@ class AdminController extends Controller
         } else {
             return redirect()->route("manager.categories.index")->with("error", "Category failed to update!");
         }
+    }
+
+    public function deleteCourse(Request $request, Course $course)
+    {
+        return view("backend.admin.delete-course", [
+            "course" => $course
+        ]);
+    }
+
+    public function destroyCourse(Request $request, Course $course)
+    {
+        $thumb = $course->thumbnail;
+        $destroy = $course->delete();
+
+        if ($destroy) {
+            if (file_exists(asset("storage/" . $thumb))) {
+                unlink(asset("storage/" . $thumb));
+            }
+            return redirect()->route("manager.courses")->with("success", "Course deleted successfully");
+        } else {
+            return redirect()->route("manager.courses")->with("error", "Course delete failed");
+        }
+    }
+
+    public function editRole(Request $request, User $user)
+    {
+        return view("backend.admin.edit-role", [
+            "user" => $user
+        ]);
+    }
+
+    public function updateRole(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            "role" => "required|in:instructor,user"
+        ]);
+
+        $user->role = $validated["role"];
+        $user->save();
+
+        return redirect()->route("manager.users.view")->with("success", "User role updated successfully");
     }
 }

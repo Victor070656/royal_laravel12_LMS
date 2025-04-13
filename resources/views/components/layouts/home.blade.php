@@ -22,8 +22,10 @@
         <div class="main-header py-8">
             <div class="container">
                 <div class=" flex items-center justify-between flex-wrap">
-                    <a href="index-2.html" class="brand-logo flex-none lg:mr-10 md:w-auto max-w-[120px] ">
-                        <img src="{{ asset('front/assets/images/logo/logo.svg') }}" alt=""></a>
+                    <a href="/" class="brand-logo flex-none lg:mr-10 md:w-auto max-w-[120px] ">
+                        {{-- <img src="{{ asset('front/assets/images/logo/logo.svg') }}" alt=""> --}}
+                        <h5 class="fw-bold fs-4"><b>Royal Educity</b></h5>
+                    </a>
                     <div class="flex items-center flex-1">
                         <div class="flex-1 main-menu  lg:relative   xl:mr-[74px] mr-6">
                             <ul class="menu-active-classes">
@@ -58,9 +60,9 @@
                             </div>
                             <div class=" hidden lg:block">
                                 @if (auth()->check())
-                                    <a href="#" class="btn btn-link">Dashboard</a>
+                                    <a href="{{ route('dashboard') }}" class="btn btn-link">Dashboard</a>
                                 @else
-                                    <a href="#" class="btn btn-primary py-[15px] px-8 ">Login</a>
+                                    <a href="{{ route('login') }}" class="btn btn-primary py-[15px] px-8 ">Login</a>
                                 @endif
                             </div>
                         </div>
