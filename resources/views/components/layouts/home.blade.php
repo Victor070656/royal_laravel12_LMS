@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
-    <title>EduMim Html Template</title>
+    <title>Royal Educity</title>
     <link rel="icon" type="image/png" href="{{ asset('front/assets/images/logo/favicon.png') }}">
     <link rel="stylesheet" href="{{ asset('front/assets/css/rt-plugins.css') }}">
     <link rel="stylesheet" href="{{ asset('front/assets/css/app.css') }}">
@@ -30,21 +30,24 @@
                         <div class="flex-1 main-menu  lg:relative   xl:mr-[74px] mr-6">
                             <ul class="menu-active-classes">
                                 <li class=" ">
-                                    <a href="#">Home</a>
+                                    <a href="{{ route('home') }}">Home</a>
                                 </li>
                                 <li class="">
-                                    <a href="#">Courses</a>
+                                    <a href="{{ route('home.courses') }}">Courses</a>
                                 </li>
                                 <li>
-                                    <a href="contact.html">Contacts</a>
+                                    <a href="{{ route("home.contact") }}">Contacts</a>
                                 </li>
                             </ul>
                             <div class="lg:block hidden">
-                                <div class="border border-gray rounded-md  h-[46px] modal-search">
-                                    <input type="text"
-                                        class=" block w-full rounded-md  h-full border-none ring-0 focus:outline-none  focus:ring-0"
-                                        placeholder="Search..">
-                                </div>
+                                <form action="{{ route('home.courses') }}" method="get">
+
+                                    <div class="border border-gray rounded-md  h-[46px] modal-search">
+                                        <input type="search" name="search"
+                                            class=" block w-full rounded-md  h-full border-none ring-0 focus:outline-none  focus:ring-0"
+                                            placeholder="Search..">
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div class="flex-none flex space-x-[18px]">

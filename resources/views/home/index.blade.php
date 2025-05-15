@@ -14,7 +14,7 @@
                     It is long established fact that reader distracted by the readable content.
                 </div>
                 <div class="md:flex  md:space-x-4 space-y-3 md:space-y-0">
-                    <a href="#" class="btn btn-primary">Learn From Today</a>
+                    <a href="#" class="btn btn-primary">Get Started Today &rarr;</a>
                 </div>
             </div>
             <div class="imge-box absolute right-[-60px] top-1/2  -translate-y-1/2 hidden xl:block   ">
@@ -23,6 +23,8 @@
         </div>
     </section>
     <!-- bradns section start -->
+    {{-- <iframe src="https://drive.google.com/file/d/1vv7Qxvx1CA8nAGyB_NzOZvzCT7zr_eKc/preview" frameborder="0"
+        class="w-full aspect-video"></iframe> --}}
     <div class="brands-area pt-20 pb-14 bg-black ">
         <div class="container">
 
@@ -108,6 +110,8 @@
             </div>
         </div>
     </div>
+
+
     <!-- course section start -->
     <div
         class=" section-padding bg-[url('{{ asset('front/assets/images/all-img/section-bg-11.png') }}')] bg-cover bg-no-repeat">
@@ -116,218 +120,83 @@
                 <div class="flex-1">
                     <div class="mini-title">Popular Courses</div>
                     <div class="column-title ">
-                        Choose Our Top
+                        Choose From Our Recent
                         <span class="shape-bg">Courses</span>
                     </div>
                 </div>
                 <div class="flex-none">
-                    <ul class="filter-list flex xl:space-x-[39px] space-x-4 ">
-                        <li data-filter="*" class="active tipy-info" data-tippy-content="New">
-                            See All
-                        </li>
-                        <li data-filter=".cat-2">
-                            Marketing
-                        </li>
-                        <li data-filter=".cat-3">
-                            Design
-                        </li>
-                        <li data-filter=".cat-4 ">
-                            Finance
-                        </li>
-                    </ul>
+
                 </div>
             </div>
-            <div class="flex flex-wrap pt-10 grids">
+            <div class="flex flex-wrap pt-10 grids justify-center">
 
+                @forelse ($courses as $course)
+                    {{-- @dd() --}}
+                    @php
+                        $lessons = 0;
+                        $sections = $course->sections;
+                        if (isset($course->sections)) {
+                            foreach ($sections as $section) {
+                                $lessons += $section->courseContent->count();
+                            }
+                        }
 
-                <div class="cat-2 cat-3 grid-item xl:w-1/3 lg:w-1/2 w-full px-[15px] mb-[15px]">
-                    <a class=" bg-white shadow-box2 rounded-[8px] transition duration-100 hover:shadow-sm block   mb-5 "
-                        href="#">
-                        <div class="course-thumb h-[248px] rounded-t-[8px]  relative">
-                            <img src="{{ asset('front/assets/images/all-img/c6.png') }}" alt=""
-                                class=" w-full h-full object-cover rounded-t-[8px]">
-                            <span
-                                class="bg-secondary py-1 px-3 text-lg font-semibold rounded text-white absolute left-6 top-6">Art
-                                &amp; Design</span>
-                        </div>
-                        <div class="course-content p-8">
-                            <div class="text-secondary font-bold text-2xl mb-3">$29.28</div>
-                            <h4 class=" text-xl mb-3 font-bold">Basic Fundamentals of Interior &amp; Graphics Design
-                            </h4>
-                            <div class="flex justify-between  space-x-3">
-                                <span class=" flex items-center space-x-2">
-                                    <img src="{{ asset('front/assets/images/svg/file.svg') }}" alt="">
-                                    <span>2 Lessons</span>
-                                </span>
-                                <span class=" flex items-center space-x-2">
-                                    <img src="{{ asset('front/assets/images/svg/clock.svg') }}" alt="">
-                                    <span>4h 30m</span>
-                                </span>
-                                <span class=" flex items-center space-x-2">
-                                    <img src="{{ asset('front/assets/images/svg/star.svg') }}" alt="">
-                                    <span>4.8</span>
-                                </span>
+                        $rating = 0;
+                        $count_review = 0;
+                        if (isset($course->reviews)) {
+                            $count_review = $course->reviews->count();
+                        }
+                        if ($count_review > 0) {
+                            foreach ($course->reviews as $review) {
+                                $rating += $review->rating;
+                            }
+                            $rating = $rating / $count_review;
+                        } else {
+                            $rating = 0;
+                        }
+                        $rating = number_format($rating, 1);
+
+                        $category = \App\Models\Category::where('id', '=', $course->category_id)->get();
+                    @endphp
+                    <div class="cat-2 cat-3 grid-item xl:w-1/3 lg:w-1/2 w-full px-[15px] mb-[15px]">
+                        <a class=" bg-white shadow-box2 rounded-[8px] transition duration-100 hover:shadow-sm block   mb-5 "
+                            href="{{ route('home.course.details', $course) }}">
+                            <div class="course-thumb h-[248px] rounded-t-[8px]  relative">
+                                <img src="{{ asset('storage/' . $course->thumbnail) }}" alt=""
+                                    class=" w-full h-full object-cover rounded-t-[8px]">
+                                <span
+                                    class="bg-secondary py-1 px-3 text-lg font-semibold rounded text-white absolute left-6 top-6">{{ $category->first()->category_name }}</span>
                             </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="cat-2 cat-3 grid-item xl:w-1/3 lg:w-1/2 w-full px-[15px] mb-[15px]">
-                    <a class=" bg-white shadow-box2 rounded-[8px] transition duration-100 hover:shadow-sm block   mb-5 "
-                        href="#">
-                        <div class="course-thumb h-[248px] rounded-t-[8px]  relative">
-                            <img src="{{ asset('front/assets/images/all-img/c7.png') }}" alt=""
-                                class=" w-full h-full object-cover rounded-t-[8px]">
-                            <span
-                                class="bg-secondary py-1 px-3 text-lg font-semibold rounded text-white absolute left-6 top-6">Developemet</span>
-                        </div>
-                        <div class="course-content p-8">
-                            <div class="text-secondary font-bold text-2xl mb-3">Free</div>
-                            <h4 class=" text-xl mb-3 font-bold">Increasing Engagement with Instagram &amp; Facebook
-                            </h4>
-                            <div class="flex justify-between  space-x-3">
-                                <span class=" flex items-center space-x-2">
-                                    <img src="{{ asset('front/assets/images/svg/file.svg') }}" alt="">
-                                    <span>2 Lessons</span>
-                                </span>
-                                <span class=" flex items-center space-x-2">
-                                    <img src="{{ asset('front/assets/images/svg/clock.svg') }}" alt="">
-                                    <span>4h 30m</span>
-                                </span>
-                                <span class=" flex items-center space-x-2">
-                                    <img src="{{ asset('front/assets/images/svg/star.svg') }}" alt="">
-                                    <span>4.8</span>
-                                </span>
+                            <div class="course-content p-8">
+                                <div class="text-secondary font-bold text-2xl mb-3">
+                                    ₦{{ number_format($course->price) }}</div>
+                                <h4 class=" text-xl mb-3 font-bold">
+                                    {{ $course->course_name }}
+                                </h4>
+                                <div class="flex justify-between  space-x-3">
+                                    <span class=" flex items-center space-x-2">
+                                        <img src="{{ asset('front/assets/images/svg/file.svg') }}" alt="">
+                                        <span>{{ $lessons }} Lessons</span>
+                                    </span>
+                                    <span class=" flex items-center space-x-2">
+                                        <img src="{{ asset('front/assets/images/svg/clock.svg') }}" alt="">
+                                        <span>{{ $course->duration }}</span>
+                                    </span>
+                                    <span class=" flex items-center space-x-2">
+                                        <img src="{{ asset('front/assets/images/svg/star.svg') }}" alt="">
+                                        <span>{{ $rating }}</span>
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="cat-3 cat-4 grid-item xl:w-1/3 lg:w-1/2 w-full px-[15px] mb-[15px]">
-                    <a class=" bg-white shadow-box2 rounded-[8px] transition duration-100 hover:shadow-sm block   mb-5 "
-                        href="#">
-                        <div class="course-thumb h-[248px] rounded-t-[8px]  relative">
-                            <img src="{{ asset('front/assets/images/all-img/c8.png') }}" alt=""
-                                class=" w-full h-full object-cover rounded-t-[8px]">
-                            <span
-                                class="bg-secondary py-1 px-3 text-lg font-semibold rounded text-white absolute left-6 top-6">Drawing</span>
-                        </div>
-                        <div class="course-content p-8">
-                            <div class="text-secondary font-bold text-2xl mb-3">$72.39</div>
-                            <h4 class=" text-xl mb-3 font-bold">Introduction to Color Theory &amp;
-                                Basic UI/UX</h4>
-                            <div class="flex justify-between  space-x-3">
-                                <span class=" flex items-center space-x-2">
-                                    <img src="{{ asset('front/assets/images/svg/file.svg') }}" alt="">
-                                    <span>2 Lessons</span>
-                                </span>
-                                <span class=" flex items-center space-x-2">
-                                    <img src="{{ asset('front/assets/images/svg/clock.svg') }}" alt="">
-                                    <span>4h 30m</span>
-                                </span>
-                                <span class=" flex items-center space-x-2">
-                                    <img src="{{ asset('front/assets/images/svg/star.svg') }}" alt="">
-                                    <span>4.8</span>
-                                </span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="cat-4 cat-2 grid-item xl:w-1/3 lg:w-1/2 w-full px-[15px] mb-[15px]">
-                    <a class=" bg-white shadow-box2 rounded-[8px] transition duration-100 hover:shadow-sm block   mb-5 "
-                        href="#">
-                        <div class="course-thumb h-[248px] rounded-t-[8px]  relative">
-                            <img src="{{ asset('front/assets/images/all-img/c9.png') }}" alt=""
-                                class=" w-full h-full object-cover rounded-t-[8px]">
-                            <span
-                                class="bg-secondary py-1 px-3 text-lg font-semibold rounded text-white absolute left-6 top-6">Technology</span>
-                        </div>
-                        <div class="course-content p-8">
-                            <div class="text-secondary font-bold text-2xl mb-3">$72.39</div>
-                            <h4 class=" text-xl mb-3 font-bold">Financial Security Thinking and Principles Theory</h4>
-                            <div class="flex justify-between  space-x-3">
-                                <span class=" flex items-center space-x-2">
-                                    <img src="{{ asset('front/assets/images/svg/file.svg') }}" alt="">
-                                    <span>2 Lessons</span>
-                                </span>
-                                <span class=" flex items-center space-x-2">
-                                    <img src="{{ asset('front/assets/images/svg/clock.svg') }}" alt="">
-                                    <span>4h 30m</span>
-                                </span>
-                                <span class=" flex items-center space-x-2">
-                                    <img src="{{ asset('front/assets/images/svg/star.svg') }}" alt="">
-                                    <span>4.8</span>
-                                </span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class=" cat-3 cat-2 grid-item xl:w-1/3 lg:w-1/2 w-full px-[15px] mb-[15px]">
-                    <a class=" bg-white shadow-box2 rounded-[8px] transition duration-100 hover:shadow-sm block   mb-5 "
-                        href="#">
-                        <div class="course-thumb h-[248px] rounded-t-[8px]  relative">
-                            <img src="{{ asset('front/assets/images/all-img/c10.png') }}" alt=""
-                                class=" w-full h-full object-cover rounded-t-[8px]">
-                            <span
-                                class="bg-secondary py-1 px-3 text-lg font-semibold rounded text-white absolute left-6 top-6">Data
-                                Science</span>
-                        </div>
-                        <div class="course-content p-8">
-                            <div class="text-secondary font-bold text-2xl mb-3">Free</div>
-                            <h4 class=" text-xl mb-3 font-bold">Logo Design: From Concept to Presentation</h4>
-                            <div class="flex justify-between  space-x-3">
-                                <span class=" flex items-center space-x-2">
-                                    <img src="{{ asset('front/assets/images/svg/file.svg') }}" alt="">
-                                    <span>2 Lessons</span>
-                                </span>
-                                <span class=" flex items-center space-x-2">
-                                    <img src="{{ asset('front/assets/images/svg/clock.svg') }}" alt="">
-                                    <span>4h 30m</span>
-                                </span>
-                                <span class=" flex items-center space-x-2">
-                                    <img src="{{ asset('front/assets/images/svg/star.svg') }}" alt="">
-                                    <span>4.8</span>
-                                </span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="cat-4  cat-2 grid-item xl:w-1/3 lg:w-1/2 w-full px-[15px] mb-[15px]">
-                    <a class=" bg-white shadow-box2 rounded-[8px] transition duration-100 hover:shadow-sm block   mb-5 "
-                        href="#">
-                        <div class="course-thumb h-[248px] rounded-t-[8px]  relative">
-                            <img src="{{ asset('front/assets/images/all-img/c11.png') }}" alt=""
-                                class=" w-full h-full object-cover rounded-t-[8px]">
-                            <span
-                                class="bg-secondary py-1 px-3 text-lg font-semibold rounded text-white absolute left-6 top-6">Developemet</span>
-                        </div>
-                        <div class="course-content p-8">
-                            <div class="text-secondary font-bold text-2xl mb-3">$29.82</div>
-                            <h4 class=" text-xl mb-3 font-bold">Professional Ceramic Moulding for Beginners</h4>
-                            <div class="flex justify-between  space-x-3">
-                                <span class=" flex items-center space-x-2">
-                                    <img src="{{ asset('front/assets/images/svg/file.svg') }}" alt="">
-                                    <span>2 Lessons</span>
-                                </span>
-                                <span class=" flex items-center space-x-2">
-                                    <img src="{{ asset('front/assets/images/svg/clock.svg') }}" alt="">
-                                    <span>4h 30m</span>
-                                </span>
-                                <span class=" flex items-center space-x-2">
-                                    <img src="{{ asset('front/assets/images/svg/star.svg') }}" alt="">
-                                    <span>4.8</span>
-                                </span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
+                @empty
+                    <p class="py-6 text-center">No courses found</p>
+                @endforelse
 
             </div>
             <div class="text-center lg:pt-16 pt-10">
-                <a href="#" class=" btn btn-primary">View All Courses</a>
+                <a href="{{ route('home.courses') }}" class=" btn btn-primary">View All Courses</a>
             </div>
         </div>
     </div>
@@ -539,19 +408,19 @@
                     <div class="slider-nav">
                         <div class="single-item">
                             <div class="xl:h-[593px] lg:h-[400px] h-[150px] lg:w-full w-[150px] rounded-md">
-                                <img src="assets/images/all-img/t1.png" alt=""
+                                <img src="{{ asset('front/assets/images/all-img/t1.png') }}" alt=""
                                     class=" object-cover w-full h-full rounded-md" />
                             </div>
                         </div>
                         <div class="single-item">
                             <div class="xl:h-[593px] lg:h-[400px] h-[150px] lg:w-full w-[150px]  rounded-md">
-                                <img src="assets/images/all-img/t1.png" alt=""
+                                <img src="{{ asset('front/assets/images/all-img/t1.png') }}" alt=""
                                     class=" object-cover w-full h-full rounded-md" />
                             </div>
                         </div>
                         <div class="single-item">
                             <div class="xl:h-[593px] lg:h-[400px] h-[150px] lg:w-full w-[150px]  rounded-md">
-                                <img src="assets/images/all-img/t1.png" alt=""
+                                <img src="{{ asset('front/assets/images/all-img/t1.png') }}" alt=""
                                     class=" object-cover w-full h-full rounded-md" />
                             </div>
                         </div>
@@ -625,147 +494,8 @@
             </div>
         </div>
     </div>
-    <!-- events start -->
-    <div class=" section-padding bg-white bg-[url('../images/all-img/section-bg-13.html')]  bg-no-repeat">
-        <div class="container">
-            <div class="text-center mb-14">
-                <div class="mini-title">Join With Us</div>
-                <div class="column-title ">
-                    Upcoming
-                    <span class="shape-bg">Events</span>
-                </div>
-            </div>
-            <div class="grid xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-[30px]">
 
 
-                <div class=" bg-white shadow-box5 rounded-[8px] transition duration-100 hover:shadow-box3">
-                    <div class="course-thumb h-[297px] rounded-t-[8px]  relative">
-                        <img src="assets/images/all-img/e1.png" alt=""
-                            class=" w-full h-full object-cover rounded-t-[8px]">
-                    </div>
-                    <div class="course-content p-8">
-                        <h4 class=" text-xl mb-5 font-bold">
-                            <a href="event-single.html" class=" hover:text-primary transition duration-150">
-                                International Art Fair 2022
-                            </a>
-                        </h4>
-                        <ul class=" list space-y-3 mb-6">
-                            <li class=" flex space-x-2">
-                                <span class="text-lg  text-secondary">
-                                    <iconify-icon icon="heroicons:calendar-days"></iconify-icon>
-                                </span>
-                                <span>Thu, Oct 5, 2023 03:48 PM</span>
-                            </li>
-                            <li class=" flex space-x-2">
-                                <span class="text-lg  text-secondary">
-                                    <iconify-icon icon="heroicons:map-pin"></iconify-icon>
-                                </span>
-                                <span>Humberg City, Germany</span>
-                            </li>
-                        </ul>
-                        <a href="event-single.html"
-                            class="btn px-8 py-[11px] bg-black text-white hover:bg-primary">Book A Seat</a>
-                    </div>
-                </div>
-
-                <div class=" bg-white shadow-box5 rounded-[8px] transition duration-100 hover:shadow-box3">
-                    <div class="course-thumb h-[297px] rounded-t-[8px]  relative">
-                        <img src="assets/images/all-img/e2.png" alt=""
-                            class=" w-full h-full object-cover rounded-t-[8px]">
-                    </div>
-                    <div class="course-content p-8">
-                        <h4 class=" text-xl mb-5 font-bold">
-                            <a href="event-single.html" class=" hover:text-primary transition duration-150">
-                                International Art Fair 2022
-                            </a>
-                        </h4>
-                        <ul class=" list space-y-3 mb-6">
-                            <li class=" flex space-x-2">
-                                <span class="text-lg  text-secondary">
-                                    <iconify-icon icon="heroicons:calendar-days"></iconify-icon>
-                                </span>
-                                <span>Thu, Oct 5, 2023 03:48 PM</span>
-                            </li>
-                            <li class=" flex space-x-2">
-                                <span class="text-lg  text-secondary">
-                                    <iconify-icon icon="heroicons:map-pin"></iconify-icon>
-                                </span>
-                                <span>Humberg City, Germany</span>
-                            </li>
-                        </ul>
-                        <a href="event-single.html"
-                            class="btn px-8 py-[11px] bg-black text-white hover:bg-primary">Book A Seat</a>
-                    </div>
-                </div>
-
-                <div class=" bg-white shadow-box5 rounded-[8px] transition duration-100 hover:shadow-box3">
-                    <div class="course-thumb h-[297px] rounded-t-[8px]  relative">
-                        <img src="{{ asset('front/assets/images/all-img/e3.png') }}" alt=""
-                            class=" w-full h-full object-cover rounded-t-[8px]">
-                    </div>
-                    <div class="course-content p-8">
-                        <h4 class=" text-xl mb-5 font-bold">
-                            <a href="event-single.html" class=" hover:text-primary transition duration-150">
-                                International Art Fair 2022
-                            </a>
-                        </h4>
-                        <ul class=" list space-y-3 mb-6">
-                            <li class=" flex space-x-2">
-                                <span class="text-lg  text-secondary">
-                                    <iconify-icon icon="heroicons:calendar-days"></iconify-icon>
-                                </span>
-                                <span>Thu, Oct 5, 2023 03:48 PM</span>
-                            </li>
-                            <li class=" flex space-x-2">
-                                <span class="text-lg  text-secondary">
-                                    <iconify-icon icon="heroicons:map-pin"></iconify-icon>
-                                </span>
-                                <span>Humberg City, Germany</span>
-                            </li>
-                        </ul>
-                        <a href="event-single.html"
-                            class="btn px-8 py-[11px] bg-black text-white hover:bg-primary">Book A Seat</a>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    <!-- course block start -->
-    <div
-        class="lg:pt-10 section-padding-bottom bg-white bg-[url('{{ asset('front/assets/images/all-img/section-bg-14.png') }}')] bg-center bg-no-repeat
-            bg-cover">
-        <div class="container">
-            <div class="grid lg:grid-cols-2 grid-cols-1 gap-7">
-                <div class="bg-[url('../images/all-img/bg-ins-1.png')] bg-cover  bg-no-repeat p-10  rounded-md">
-                    <div class="max-w-[337px]">
-                        <div class="mini-title">Build Your Career</div>
-                        <div class=" text-[34px] text-black leading-[51px]">
-                            Become an
-                            <span class="shape-bg">Instructor</span>
-                        </div>
-                        <div class=" mt-6 mb-12">
-                            Learn at your own pace, move the between multiple courses.
-                        </div>
-                        <a href="#" class="btn btn-primary">Apply Now</a>
-                    </div>
-                </div>
-                <div class="bg-[url('../images/all-img/bg-ins-2.png')]  bg-no-repeat p-10 bg-cover rounded-md">
-                    <div class="max-w-[337px]">
-                        <div class="mini-title">Build Your Career</div>
-                        <div class=" text-[34px] text-black leading-[51px]">
-                            Get Free
-                            <span class="shape-bg">Courses</span>
-                        </div>
-                        <div class=" mt-6 mb-12">
-                            Learn at your own pace, move the between multiple courses.
-                        </div>
-                        <a href="#" class="btn btn-black">Contact Us</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- accrodain start -->
     <div
         class="section-padding  bg-white bg-[url('../images/all-img/section-bg-15.html')] bg-bottom  bg-cover bg-no-repeat">
@@ -832,151 +562,5 @@
             </div>
         </div>
     </div>
-    <!-- Article  Start  -->
-    <div class=" section-padding">
-        <div class="container">
-            <div class="text-center">
-                <div class="mini-title">Blog & Airticle</div>
-                <div class="column-title ">
-                    Take A Look At The Latest
-                    <span class="shape-bg">Articles</span>
-                </div>
-            </div>
-            <div class="grid  xl:grid-cols-2 grid-cols-1 gap-7 pt-10">
 
-
-                <div
-                    class=" bg-white shadow-box7 rounded-[8px] group transition duration-150 ring-0 hover:ring-2 hover:ring-primary
-            hover:shadow-box8 sm:flex p-4 sm:space-x-6 space-y-6 sm:space-y-0">
-                    <div class="flex-none">
-                        <div class="sm:w-[200px] h-[182px]  rounded  relative">
-                            <img src="{{ asset('front/assets/images/all-img/c1.png') }}" alt=""
-                                class=" w-full h-full object-cover rounded">
-                        </div>
-                    </div>
-                    <div class="course-content flex-1">
-                        <div class="mb-4">
-                            <span
-                                class="inline-block text-base text-secondary bg-[#E3F9F6] font-medium rounded px-[10px] py-1">
-                                Learning</span>
-                        </div>
-                        <h4 class=" lg:text-2xl lg:leading-[36px] text-1xl mb-4 font-bold">
-                            <a href="blog-single.html"
-                                class=" group-hover:text-primary transitio duration-150">Fashion and Luxury Fashion in
-                                a Changing</a>
-                        </h4>
-                        <div class="flex   space-x-6">
-                            <a class=" flex items-center space-x-2" href="#">
-                                <img src="{{ asset('front/assets/images/svg/calender2.svg') }}" alt="">
-                                <span>21 Feb, 22</span>
-                            </a>
-                            <a class=" flex items-center space-x-2" href="#">
-                                <img src="{{ asset('front/assets/images/svg/clock2.svg') }}" alt="">
-                                <span>4k Lesson</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div
-                    class=" bg-white shadow-box7 rounded-[8px] group transition duration-150 ring-0 hover:ring-2 hover:ring-primary
-            hover:shadow-box8 sm:flex p-4 sm:space-x-6 space-y-6 sm:space-y-0">
-                    <div class="flex-none">
-                        <div class="sm:w-[200px] h-[182px]  rounded  relative">
-                            <img src="{{ asset('front/assets/images/all-img/c2.png') }}" alt=""
-                                class=" w-full h-full object-cover rounded">
-                        </div>
-                    </div>
-                    <div class="course-content flex-1">
-                        <div class="mb-4">
-                            <span
-                                class="inline-block text-base text-secondary bg-[#E3F9F6] font-medium rounded px-[10px] py-1">
-                                Learning</span>
-                        </div>
-                        <h4 class=" lg:text-2xl lg:leading-[36px] text-1xl mb-4 font-bold">
-                            <a href="blog-single.html"
-                                class=" group-hover:text-primary transitio duration-150">Creative Writing Through
-                                Storytelling</a>
-                        </h4>
-                        <div class="flex   space-x-6">
-                            <a class=" flex items-center space-x-2" href="#">
-                                <img src="{{ asset('front/assets/images/svg/calender2.svg') }}" alt="">
-                                <span>21 Feb, 22</span>
-                            </a>
-                            <a class=" flex items-center space-x-2" href="#">
-                                <img src="{{ asset('front/assets/images/svg/clock2.svg') }}" alt="">
-                                <span>4k Lesson</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div
-                    class=" bg-white shadow-box7 rounded-[8px] group transition duration-150 ring-0 hover:ring-2 hover:ring-primary
-            hover:shadow-box8 sm:flex p-4 sm:space-x-6 space-y-6 sm:space-y-0">
-                    <div class="flex-none">
-                        <div class="sm:w-[200px] h-[182px]  rounded  relative">
-                            <img src="{{ asset('front/assets/images/all-img/c3.png') }}" alt=""
-                                class=" w-full h-full object-cover rounded">
-                        </div>
-                    </div>
-                    <div class="course-content flex-1">
-                        <div class="mb-4">
-                            <span
-                                class="inline-block text-base text-secondary bg-[#E3F9F6] font-medium rounded px-[10px] py-1">
-                                Learning</span>
-                        </div>
-                        <h4 class=" lg:text-2xl lg:leading-[36px] text-1xl mb-4 font-bold">
-                            <a href="blog-single.html"
-                                class=" group-hover:text-primary transitio duration-150">Product Manager Learn The
-                                Skills &amp; Job</a>
-                        </h4>
-                        <div class="flex   space-x-6">
-                            <a class=" flex items-center space-x-2" href="#">
-                                <img src="{{ asset('front/assets/images/svg/calender2.svg') }}" alt="">
-                                <span>21 Feb, 22</span>
-                            </a>
-                            <a class=" flex items-center space-x-2" href="#">
-                                <img src="{{ asset('front/assets/images/svg/clock2.svg') }}" alt="">
-                                <span>4k Lesson</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div
-                    class=" bg-white shadow-box7 rounded-[8px] group transition duration-150 ring-0 hover:ring-2 hover:ring-primary
-            hover:shadow-box8 sm:flex p-4 sm:space-x-6 space-y-6 sm:space-y-0">
-                    <div class="flex-none">
-                        <div class="sm:w-[200px] h-[182px]  rounded  relative">
-                            <img src="{{ asset('front/assets/images/all-img/c4.png') }}" alt=""
-                                class=" w-full h-full object-cover rounded">
-                        </div>
-                    </div>
-                    <div class="course-content flex-1">
-                        <div class="mb-4">
-                            <span
-                                class="inline-block text-base text-secondary bg-[#E3F9F6] font-medium rounded px-[10px] py-1">
-                                Learning</span>
-                        </div>
-                        <h4 class=" lg:text-2xl lg:leading-[36px] text-1xl mb-4 font-bold">
-                            <a href="blog-single.html" class=" group-hover:text-primary transitio duration-150">The
-                                Power of Podcast for Storytelling</a>
-                        </h4>
-                        <div class="flex   space-x-6">
-                            <a class=" flex items-center space-x-2" href="#">
-                                <img src="{{ asset('front/assets/images/svg/calender2.svg') }}" alt="">
-                                <span>21 Feb, 22</span>
-                            </a>
-                            <a class=" flex items-center space-x-2" href="#">
-                                <img src="{{ asset('front/assets/images/svg/clock2.svg') }}" alt="">
-                                <span>4k Lesson</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
 </x-layouts.home>

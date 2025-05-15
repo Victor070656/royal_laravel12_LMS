@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\Course;
+use App\Models\CourseContent;
 use App\Models\Order;
 use App\Models\Section;
 use App\Models\User;
@@ -166,7 +167,15 @@ class InstructorController extends Controller
         ]);
     }
 
-    public function createContent(Request $request, Section $section) {
+    public function editContent(CourseContent $courseContent)
+    {
+        return view("backend.instructor.edit-content", [
+            "courseContent" => $courseContent
+        ]);
+    }
+
+    public function createContent(Request $request, Section $section)
+    {
         $validated = $request->validate([
             "title" => "required|max:255",
             "type" => "required|in:video,material",
@@ -178,6 +187,23 @@ class InstructorController extends Controller
             return redirect()->route("instructor.course.view", $section->course)->with("success", "Content Added");
         } else {
             return redirect()->route("instructor.course.view", $section->course)->with("error", "Error adding content!");
+        }
+    }
+
+    public function updateContent(Request $request, CourseContent $courseContent)
+    {
+        // dd($courseContent->section->course);
+        $validated = $request->validate([
+            "title" => "required|max:255",
+            "type" => "required|in:video,material",
+            "link" => "required"
+        ]);
+
+        $add = $courseContent->update($validated);
+        if ($add) {
+            return redirect()->route("instructor.course.view", $courseContent->section->course)->with("success", "Content Updated");
+        } else {
+            return redirect()->route("instructor.course.view", $courseContent->section->course)->with("error", "Error updating content!");
         }
     }
 }

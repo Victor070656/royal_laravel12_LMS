@@ -18,7 +18,6 @@
                             <th scope="col" class="p-3">Thumbnail</th>
                             <th scope="col" class="p-3">Course Name</th>
                             <th scope="col" class="p-3">Instructor</th>
-                            <th scope="col" class="p-3">Short Description</th>
                             <th scope="col" class="p-3">Scheme</th>
                             <th scope="col" class="p-3">Requirements</th>
                             <th scope="col" class="p-3">Price</th>
@@ -38,17 +37,19 @@
                                     {{ $course->course_name }}
                                 </td>
                                 <td class="p-3">{{ $course->user->first_name . ' ' . $course->user->last_name }}</td>
-                                <td class="p-3 truncated">{{ $course->short_desc }}</td>
                                 <td class="p-3">{{ $course->scheme }}</td>
                                 <td class="p-3">{{ $course->requirements }}</td>
                                 <td class="p-3">{{ $course->price }}</td>
                                 <td class="p-3">
-                                    <flux:button variant="primary" size="xs" icon="eye" title="View" wire:navigate
-                                        href="{{ route('instructor.course.view', $course) }}"></flux:button>
-                                    <flux:button variant="primary" size="xs" icon="pencil" title="Edit" wire:navigate
-                                        href="{{ route('instructor.course.edit', $course) }}"></flux:button>
-                                    <flux:button variant="danger" size="xs" icon="trash" title="Delete" wire:navigate
-                                        href="{{ route('instructor.course.delete', $course) }}"></flux:button>
+                                    <flux:button variant="primary" size="xs" icon="eye" title="View"
+                                        wire:navigate href="{{ route('instructor.course.view', $course) }}">
+                                    </flux:button>
+                                    <flux:button variant="primary" size="xs" icon="pencil" title="Edit"
+                                        wire:navigate href="{{ route('instructor.course.edit', $course) }}">
+                                    </flux:button>
+                                    <flux:button variant="danger" size="xs" icon="trash" title="Delete"
+                                        wire:navigate href="{{ route('instructor.course.delete', $course) }}">
+                                    </flux:button>
                                 </td>
                             </tr>
                         @endforeach

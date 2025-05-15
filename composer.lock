@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "53e1bdf8ec5f2bbfda831bc3182c44ae",
+    "content-hash": "34e58d45cdc26d4b08f4eaf8a8255c9b",
     "packages": [
         {
             "name": "brick/math",
@@ -2216,6 +2216,49 @@
                 "source": "https://github.com/livewire/volt"
             },
             "time": "2025-02-17T16:24:59+00:00"
+        },
+        {
+            "name": "matscode/paystack",
+            "version": "v1.10.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/matscode/paystack.git",
+                "reference": "97feac7c5506cd9231510e8e0f5836c28e1b7599"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/matscode/paystack/zipball/97feac7c5506cd9231510e8e0f5836c28e1b7599",
+                "reference": "97feac7c5506cd9231510e8e0f5836c28e1b7599",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Matscode\\Paystack\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-only"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Akanji",
+                    "email": "matscode@gmail.com",
+                    "homepage": "http://michaelakanji.com"
+                }
+            ],
+            "description": "This package is for communicating with PAYSTACK API",
+            "keywords": [
+                "payment",
+                "paystack",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/matscode/paystack/issues",
+                "source": "https://github.com/matscode/paystack/tree/v1.10.1"
+            },
+            "time": "2024-07-25T10:43:56+00:00"
         },
         {
             "name": "monolog/monolog",

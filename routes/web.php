@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Backend\AdminController;
 use App\Http\Controllers\Backend\InstructorController;
+use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -9,14 +11,21 @@ use Livewire\Volt\Volt;
 //     return view('welcome');
 // })->name('home');
 
-Route::get('/', function () {
-    return view('home.index');
-})->name("home");
+// front
+Route::get('/', [HomeController::class, "index"])->name("home");
+Route::get('/contact', [HomeController::class, "contactUs"])->name("home.contact");
+Route::get('/courses', [HomeController::class, "getCourses"])->name("home.courses");
+Route::get('/course/{course}', [HomeController::class, "courseDetails"])->name("home.course.details");
 
 // student
-Route::get('/dashboard', function () {
-    return view('backend.student.dashboard');
-})->middleware(['auth', 'verified', "isUser"])->name('dashboard');
+Route::middleware(['auth', 'verified', "isUser"])->group(function () {
+    Route::post('/course/{course}/buy', [HomeController::class, "buyCourse"])->name("home.course.buy");
+    Route::get("/course/{course}/pay", [HomeController::class, "payCourse"])->name("home.course.pay");
+    Route::get('/dashboard', [UserController::class, "index"])->name('dashboard');
+    Route::get('/my-courses', [UserController::class, "myCourses"])->name('student.courses');
+    Route::get('/my-courses/{order}', [UserController::class, "viewCourse"])->name('student.course.details');
+    Route::get('/lesson/{courseContent}/watch', [UserController::class, "watchLesson"])->name('student.lesson.watch');
+});
 
 
 // instructor
@@ -40,6 +49,8 @@ Route::middleware(['auth', 'verified', "isInstructor"])->prefix("instructor")->g
     Route::put("/section/{section}/edit", [InstructorController::class, "updateSection"])->name("instructor.section.edit");
     Route::get("/section/{section}/add-content", [InstructorController::class, "addContent"])->name("instructor.section.add-content");
     Route::post("/section/{section}/add-content", [InstructorController::class, "createContent"])->name("instructor.section.add-content");
+    Route::get("/content/{courseContent}/edit", [InstructorController::class, "editContent"])->name("instructor.content.edit");
+    Route::put("/content/{courseContent}/edit", [InstructorController::class, "updateContent"])->name("instructor.content.edit");
 });
 
 
