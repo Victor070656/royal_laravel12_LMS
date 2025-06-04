@@ -16,12 +16,13 @@
                     <flux:navlist.item icon="home" :href="route('home')" :current="request()->routeIs('home')" >{{ __('Home') }}</flux:navlist.item>
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
                     <flux:navlist.item icon="document" :href="route('student.courses')" :current="request()->routeIs('student.courses')" wire:navigate>{{ __('My Courses') }}</flux:navlist.item>
+                    <flux:navlist.item icon="document" :href="route('home.courses')" :current="request()->routeIs('courses')" >{{ __('Courses') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 
             <flux:spacer />
 
-            
+
 
             <!-- Desktop User Menu -->
             <flux:dropdown position="bottom" align="start">

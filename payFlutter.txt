@@ -1,0 +1,30 @@
+public function payWithFlutter($first_name, $last_name, $email, $amount, $callback_url, $currency = "NGN", $tx_ref = null)
+    {
+        if (!$tx_ref) {
+            $tx_ref = 'TX-' . uniqid() . '-' . time();
+        }
+
+        Flutterwave::setUp([
+            'secret_key' => $this->FLW_SECRET_KEY,
+            'public_key' => $this->FLW_PUBLIC_KEY,
+            'encryption_key' => $this->FLW_ENCRYPTION_KEY,
+            'environment' => "test", // or 'live'
+        ]);
+
+        $flutterwave = new Flutterwave();
+
+        $flutterwave->setAmount($amount)
+            ->setCurrency($currency)
+            ->setEmail($email)
+            ->setFirstname($first_name)
+            ->setPhoneNumber("")
+            ->setLastname($last_name)
+            ->setRedirectUrl($callback_url)
+            ->setTitle("Royal Educity")
+            ->setDescription("Course Payment")
+            ->setCountry("NG")
+            ->setLogo("")
+            ->setPaymentOptions("card,account")
+            ->initialize(); // returns raw HTML + JS
+
+    }

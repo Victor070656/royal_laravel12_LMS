@@ -9,13 +9,18 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 // paystack
 use Matscode\Paystack\Transaction;
-use Matscode\Paystack\Utility\Debug; // for Debugging purpose
-use Matscode\Paystack\Utility\Http;
+// Flutterwave
+use Flutterwave\Flutterwave;
+
 
 class HomeController extends Controller
 {
 
     private $secKey;
+    private $FLW_BASE_URL = "https://api.flutterwave.com/v3/";
+    private $FLW_PUBLIC_KEY = 'FLWPUBK_TEST-f4b43a2d9868b3754826fb550a2710e6-X'; // Your public key
+    private $FLW_SECRET_KEY = 'FLWSECK_TEST-f937a637a169210afca61ddbfaba0ad6-X'; // Your secret key
+    private $FLW_ENCRYPTION_KEY = 'FLWSECK_TEST7af78d33db85'; // Your encryption key
 
     public function __construct()
     {
@@ -63,12 +68,12 @@ class HomeController extends Controller
 
         $rating = 0;
         $count_review = 0;
-        if (isset($course->reviews)) {
-            $count_review = $course->reviews->count();
+        if (isset($course->review)) {
+            $count_review = $course->review->count();
         }
         if ($count_review > 0) {
-            foreach ($course->reviews as $review) {
-                $rating += $review->rating;
+            foreach ($course->review as $review) {
+                $rating += $review->star;
             }
             $rating = $rating / $count_review;
         } else {
@@ -128,7 +133,11 @@ class HomeController extends Controller
         $check = $course->orders()->where("user_id", "=", $user->id)->first() ?? null;
         if (!$check) {
 
-            $this->makePayment($email, $price, route('home.course.pay', $course));
+            // $this->makePayment($email, $price, route('home.course.pay', $course));
+            // dd(route('home.course.pay', $course));
+            $this->payWithFlutter($user->first_name, $user->last_name, $email, $price, route('home.course.pay', $course));
+            // dd($res);
+
         } else {
             return redirect()->route("home.course.details", $course)->with("error", "Course already bought by you!");
         }
@@ -176,4 +185,37 @@ class HomeController extends Controller
         $transaction = new Transaction($this->secKey);
         return $transaction->isSuccessful($ref);
     }
+
+    public function payWithFlutter($first_name, $last_name, $email, $amount, $callback_url, $currency = "NGN", $tx_ref = null)
+    {
+        if (!$tx_ref) {
+            $tx_ref = 'TX-' . uniqid() . '-' . time();
+        }
+
+        Flutterwave::setUp([
+            'secret_key' => $this->FLW_SECRET_KEY,
+            'public_key' => $this->FLW_PUBLIC_KEY,
+            'encryption_key' => $this->FLW_ENCRYPTION_KEY,
+            'environment' => "test", // or 'live'
+        ]);
+
+        $flutterwave = new Flutterwave();
+
+        $flutterwave->setAmount($amount)
+            ->setCurrency($currency)
+            ->setEmail($email)
+            ->setFirstname($first_name)
+            ->setPhoneNumber("")
+            ->setLastname($last_name)
+            ->setRedirectUrl($callback_url)
+            ->setTitle("Royal Educity")
+            ->setDescription("Course Payment")
+            ->setCountry("NG")
+            ->setLogo("")
+            ->setPaymentOptions("card,account")
+            ->initialize(); // returns raw HTML + JS
+
+    }
+
+
 }

@@ -131,8 +131,7 @@
 
                                                             <flux:button
                                                                 href="{{ route('student.lesson.watch', $content) }}"
-                                                                wire:navigate variant="primary"
-                                                                size="xs">
+                                                                wire:navigate variant="primary" size="xs">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" height="24px"
                                                                     viewBox="0 -960 960 960" width="24px"
                                                                     fill="#333">
@@ -168,9 +167,29 @@
                                 <flux:icon.star variant="micro" class="text-orange-500" />
                             </span>
                         </div>
-                        <div class="mt-5 border-t">
-                            @isset($course->reviews)
-                                @forelse ($course->reviews as $review)
+                        @if (!$hasReviewed)
+                            <div class="mb-5">
+                                <h4 class="text-md font-semibold mb-4">Write a Review</h4>
+                                <form action="{{ route('student.review.write', $course) }}" method="post">
+                                    @csrf
+                                    <flux:select label="Star" name="star" class="mb-3">
+                                        <flux:select.option value="5">⭐⭐⭐⭐⭐</flux:select.option>
+                                        <flux:select.option value="4">⭐⭐⭐⭐</flux:select.option>
+                                        <flux:select.option value="3">⭐⭐⭐</flux:select.option>
+                                        <flux:select.option value="2">⭐⭐</flux:select.option>
+                                        <flux:select.option value="1">⭐</flux:select.option>
+                                    </flux:select>
+                                    <flux:textarea label="Review" name="review" class="mb-3" />
+                                    <flux:button type="submit" class="cursor-pointer" size="sm"
+                                        variant="primary">
+                                        Submit
+                                    </flux:button>
+                                </form>
+                            </div>
+                        @endif
+                        <div class="mt-5 border-t max-h-[400px] overflow-y-auto">
+                            @isset($course->review)
+                                @forelse ($course->review()->latest()->get() as $review)
                                     <div class="p-4 border-b rounded-xl">
                                         <div class="flex gap-3">
                                             <small>{{ $review->user->first_name . ' ' . $review->user->last_name }}</small>

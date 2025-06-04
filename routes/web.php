@@ -16,6 +16,11 @@ Route::get('/', [HomeController::class, "index"])->name("home");
 Route::get('/contact', [HomeController::class, "contactUs"])->name("home.contact");
 Route::get('/courses', [HomeController::class, "getCourses"])->name("home.courses");
 Route::get('/course/{course}', [HomeController::class, "courseDetails"])->name("home.course.details");
+Route::get('/initialize-payment', function () {
+    // Initialize payment logic here
+    // This is just a placeholder, you can replace it with actual payment initialization logic
+    return view('payment.flutterwave');
+})->name("course.payment.initialize");
 
 // student
 Route::middleware(['auth', 'verified', "isUser"])->group(function () {
@@ -25,6 +30,7 @@ Route::middleware(['auth', 'verified', "isUser"])->group(function () {
     Route::get('/my-courses', [UserController::class, "myCourses"])->name('student.courses');
     Route::get('/my-courses/{order}', [UserController::class, "viewCourse"])->name('student.course.details');
     Route::get('/lesson/{courseContent}/watch', [UserController::class, "watchLesson"])->name('student.lesson.watch');
+    Route::post('/review/{course}', [UserController::class, "writeReview"])->name('student.review.write');
 });
 
 

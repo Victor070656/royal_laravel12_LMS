@@ -33,12 +33,12 @@
 
                                 $rating = 0;
                                 $count_review = 0;
-                                if (isset($course->reviews)) {
-                                    $count_review = $course->reviews->count();
+                                if (isset($course->review)) {
+                                    $count_review = $course->review->count();
                                 }
                                 if ($count_review > 0) {
-                                    foreach ($course->reviews as $review) {
-                                        $rating += $review->rating;
+                                    foreach ($course->review as $review) {
+                                        $rating += $review->star;
                                     }
                                     $rating = $rating / $count_review;
                                 } else {
