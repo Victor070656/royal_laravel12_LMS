@@ -10,7 +10,8 @@ use Illuminate\Pagination\Paginator;
 // paystack
 use Matscode\Paystack\Transaction;
 // Flutterwave
-use Flutterwave\Flutterwave;
+// use Flutterwave\Flutterwave;
+use EdwardMuss\Rave\Facades\Rave as Flutterwave;
 
 
 class HomeController extends Controller
@@ -135,8 +136,9 @@ class HomeController extends Controller
 
             // $this->makePayment($email, $price, route('home.course.pay', $course));
             // dd(route('home.course.pay', $course));
-            $this->payWithFlutter($user->first_name, $user->last_name, $email, $price, route('home.course.pay', $course));
+            $res = $this->payWithFlutter($user->first_name, $user->last_name, $email, $price, route('home.course.pay', $course));
             // dd($res);
+            return $res;
 
         } else {
             return redirect()->route("home.course.details", $course)->with("error", "Course already bought by you!");
@@ -146,21 +148,35 @@ class HomeController extends Controller
     public function payCourse(Request $request, Course $course)
     {
         // dd($request);
-        if ($this->confirmTransaction($request->query("txref"))) {
-            $order = $course->orders()->create([
-                "user_id" => auth()->user()->id,
-                "amount" => $course->price,
-                "reference" => $request->query('txref')
-            ]);
+        $status = request()->status;
 
-            if ($order) {
-                return redirect()->route("home.course.details", $course)->with("success", "Payment was successful!");
+        //if payment is successful
+        if ($status == 'successful') {
+
+            $transactionID = Flutterwave::getTransactionIDFromCallback();
+            $data = Flutterwave::verifyTransaction($transactionID);
+
+            // dd($data);
+            if ($data["status"] == "success") {
+                $order = $course->orders()->create([
+                    "user_id" => auth()->user()->id,
+                    "amount" => $course->price,
+                    "reference" => $request->query('txref')
+                ]);
+
+                if ($order) {
+                    return redirect()->route("home.course.details", $course)->with("success", "Payment was successful!");
+                } else {
+                    return redirect()->route("home.course.details", $course)->with("error", "Order Failed!");
+                }
             } else {
-                return redirect()->route("home.course.details", $course)->with("error", "Payment was not successful!");
+                return redirect()->route("home.course.details", $course)->with("error", "Order Failed. Something went wrong!");
             }
+
         } else {
             return redirect()->route("home.course.details", $course)->with("error", "Something went wrong!");
         }
+
     }
 
 
@@ -180,41 +196,76 @@ class HomeController extends Controller
         // Http::redirect($response->authorizationUrl);
     }
 
+
     public function confirmTransaction($ref)
     {
         $transaction = new Transaction($this->secKey);
         return $transaction->isSuccessful($ref);
     }
 
-    public function payWithFlutter($first_name, $last_name, $email, $amount, $callback_url, $currency = "NGN", $tx_ref = null)
+
+    /**
+     * Summary of payWithFlutter
+     * @param mixed $first_name
+     * @param mixed $last_name
+     * @param mixed $email
+     * @param mixed $amount
+     * @param mixed $callback_url
+     * @param mixed $currency
+     * @return \Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse
+     */
+    public function payWithFlutter($first_name, $last_name, $email, $amount, $callback_url, $currency = "NGN")
     {
-        if (!$tx_ref) {
-            $tx_ref = 'TX-' . uniqid() . '-' . time();
+        \Log::info('Starting payment process');
+
+        try {
+            $reference = Flutterwave::generateReference();
+            \Log::info('Generated reference: ' . $reference);
+
+            $data = [
+                'payment_options' => 'card,banktransfer',
+                'amount' => $amount,
+                'email' => $email,
+                'tx_ref' => $reference,
+                'currency' => "NGN",
+                'redirect_url' => $callback_url,
+                'customer' => [
+                    'email' => $email,
+                    "name" => $first_name . " " . $last_name
+                ],
+                "customizations" => [
+                    "title" => 'Royal Educity',
+                    "description" => "Payment for course",
+                ]
+            ];
+
+            \Log::info('Payment data prepared', $data);
+
+            $payment = Flutterwave::initializePayment($data);
+            $payment = (array) $payment;
+            \Log::info('Payment response received', $payment);
+
+            // dd($payment);
+
+            if ($payment['status'] !== 'success') {
+                \Log::error('Payment initialization failed', $payment);
+                return back()->with('error', 'Payment initialization failed');
+            }
+
+            $redirectUrl = $payment['data']['link'];
+            \Log::info('Redirecting to: ' . $redirectUrl);
+            // dd($payment);
+
+
+            // return redirect()->away($redirectUrl, 301);
+            return view("payment.flutterwave", [
+                "url" => $redirectUrl,
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Payment error: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while processing payment');
         }
-
-        Flutterwave::setUp([
-            'secret_key' => $this->FLW_SECRET_KEY,
-            'public_key' => $this->FLW_PUBLIC_KEY,
-            'encryption_key' => $this->FLW_ENCRYPTION_KEY,
-            'environment' => "test", // or 'live'
-        ]);
-
-        $flutterwave = new Flutterwave();
-
-        $flutterwave->setAmount($amount)
-            ->setCurrency($currency)
-            ->setEmail($email)
-            ->setFirstname($first_name)
-            ->setPhoneNumber("")
-            ->setLastname($last_name)
-            ->setRedirectUrl($callback_url)
-            ->setTitle("Royal Educity")
-            ->setDescription("Course Payment")
-            ->setCountry("NG")
-            ->setLogo("")
-            ->setPaymentOptions("card,account")
-            ->initialize(); // returns raw HTML + JS
-
     }
 
 

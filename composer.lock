@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9883a270b9679e40c892465e87e6b607",
+    "content-hash": "910c3e80f056c60e3419aa6c36b151fc",
     "packages": [
         {
             "name": "brick/math",
@@ -442,6 +442,79 @@
                 }
             ],
             "time": "2024-10-09T13:47:03+00:00"
+        },
+        {
+            "name": "edwardmuss/flutterwave-laravel",
+            "version": "v1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/edwardmuss/flutterwave-laravel.git",
+                "reference": "a612bf2b3643a9d93e4e94f24a5fca2fbb103fd4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/edwardmuss/flutterwave-laravel/zipball/a612bf2b3643a9d93e4e94f24a5fca2fbb103fd4",
+                "reference": "a612bf2b3643a9d93e4e94f24a5fca2fbb103fd4",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2 || ^8.1"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.2",
+                "orchestra/testbench": "^4.0",
+                "phpunit/phpunit": "^8.3",
+                "satooshi/php-coveralls": ">0.7",
+                "scrutinizer/ocular": "^1.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "Rave": "EdwardMuss\\Rave\\Facades\\Rave"
+                    },
+                    "providers": [
+                        "EdwardMuss\\Rave\\RaveServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "EdwardMuss\\Rave\\": "src/"
+                },
+                "classmap": [
+                    "src/Rave.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "edwardmuss",
+                    "email": "edwardmuss5@gmail.com"
+                }
+            ],
+            "description": "A Laravel Package for Flutterwave Rave",
+            "keywords": [
+                "Flutterwave Rave",
+                "edwardmuss",
+                "flutterwave",
+                "github",
+                "laravel",
+                "laravel 5",
+                "open source",
+                "payments",
+                "php",
+                "rave",
+                "ravepay.co"
+            ],
+            "support": {
+                "issues": "https://github.com/edwardmuss/flutterwave-laravel/issues",
+                "source": "https://github.com/edwardmuss/flutterwave-laravel/tree/v1.0.3"
+            },
+            "time": "2023-01-22T16:17:40+00:00"
         },
         {
             "name": "egulias/email-validator",
