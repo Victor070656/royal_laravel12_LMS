@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <title>Royal Educity</title>
-    <link rel="icon" type="image/png" href="{{ asset('front/assets/images/logo/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('front/assets/images/logo/logo.png') }}">
     <link rel="stylesheet" href="{{ asset('front/assets/css/rt-plugins.css') }}">
     <link rel="stylesheet" href="{{ asset('front/assets/css/app.css') }}">
 
@@ -36,7 +36,7 @@
                                     <a href="{{ route('home.courses') }}">Courses</a>
                                 </li>
                                 <li>
-                                    <a href="{{ route("home.contact") }}">Contacts</a>
+                                    <a href="{{ route('home.contact') }}">Contacts</a>
                                 </li>
                             </ul>
                             <div class="lg:block hidden">
@@ -94,95 +94,35 @@
         </div>
         <div class="mobile-menu mt-6 flex-1 ">
             <ul class="menu-active-classes">
-                <li class=" menu-item-has-children">
-                    <a href="#">Home</a>
+                <li class=" ">
+                    <a href="{{ route('home') }}">Home</a>
                 </li>
-                <li class="menu-item-has-children">
-                    <a href="#">Pages</a>
-                    <ul class="sub-menu">
-                        <li>
-                            <a href="about.html">About 1</a>
-                        </li>
-                        <li>
-                            <a href="about2.html">About 2</a>
-                        </li>
-                        <li>
-                            <a href="instructor.html">instructor 1</a>
-                        </li>
-                        <li>
-                            <a href="instructor2.html">instructor 2</a>
-                        </li>
-                        <li>
-                            <a href="instructor-details.html">instructor Single</a>
-                        </li>
-                        <li>
-                            <a href="event.html">Event</a>
-                        </li>
-                        <li>
-                            <a href="event-single.html">Event single</a>
-                        </li>
-                        <li>
-                            <a href="404.html">404</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="menu-item-has-children">
-                    <a href="#">Courses</a>
-                    <ul class="sub-menu">
-                        <li>
-                            <a href="courses.html">courses</a>
-                        </li>
-                        <li>
-                            <a href="courses-sidebar.html">courses Sidebar</a>
-                        </li>
-                        <li>
-                            <a href="single-course.html">Single-course</a>
-                        </li>
-                    </ul>
-                </li>
-                <li class="menu-item-has-children">
-                    <a href="#">Blog</a>
-                    <ul class="sub-menu">
-                        <li>
-                            <a href="blog.html">Blog</a>
-                        </li>
-                        <li>
-                            <a href="blog-full.html">Full Width</a>
-                        </li>
-                        <li>
-                            <a href="blog-standard.html">Blog Standard</a>
-                        </li>
-                        <li>
-                            <a href="blog-single.html">Single Blog</a>
-                        </li>
-                    </ul>
+                <li class="">
+                    <a href="{{ route('home.courses') }}">Courses</a>
                 </li>
                 <li>
-                    <a href="contact.html">Contacts</a>
+                    <a href="{{ route('home.contact') }}">Contacts</a>
                 </li>
             </ul>
         </div>
         <div class=" flex-none pb-4">
+            <div class="">
+                @if (auth()->check())
+                    <a href="{{ route('dashboard') }}" class="btn btn-link">Dashboard</a>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-primary py-[15px] px-8 ">Login</a>
+                @endif
+            </div>
             <div class=" text-center text-black font-semibold mb-2">Follow Us</div>
             <ul class="flex space-x-4 justify-center ">
                 <li>
                     <a href="#" class="flex h-10 w-10">
-                        <img src="assets/images/icon/fb.svg" alt="">
+                        <img src="{{ asset('front/assets/images/icon/fb.svg') }}" alt="">
                     </a>
                 </li>
                 <li>
                     <a href="#" class="flex h-10 w-10">
-                        <img src="assets/images/icon/tw.svg" alt="">
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="flex h-10 w-10">
-                        <img src="assets/images/icon/pn.svg" alt="">
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="flex h-10 w-10">
-                        <img src="assets/images/icon/ins.svg" alt="">
+                        <img src="{{ asset('front/assets/images/icon/ins.svg') }}" alt="">
                     </a>
                 </li>
             </ul>
@@ -215,20 +155,7 @@
                                     <iconify-icon icon="bxl:facebook"></iconify-icon>
                                 </a>
                             </li>
-                            <li>
-                                <a href="#"
-                                    class="flex h-12 w-12 flex-col items-center justify-center rounded bg-white bg-opacity-[0.08] text-2xl text-white
-                  transition hover:bg-primary hover:text-white">
-                                    <iconify-icon icon="bxl:twitter"></iconify-icon>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                    class="flex h-12 w-12 flex-col items-center justify-center rounded bg-white bg-opacity-[0.08] text-2xl text-white
-                  transition hover:bg-primary hover:text-white">
-                                    <iconify-icon icon="bxl:linkedin"></iconify-icon>
-                                </a>
-                            </li>
+
                             <li>
                                 <a href="#"
                                     class="flex h-12 w-12 flex-col items-center justify-center rounded bg-white bg-opacity-[0.08] text-2xl text-white
@@ -241,49 +168,17 @@
                 </div>
                 <div class="single-footer">
                     <div class="flex space-x-[80px]">
-                        <div class="flex-1 lg:flex-none">
+                        <div class="">
                             <h4 class="mb-8 text-2xl font-bold text-white">Links</h4>
                             <ul class="list-item space-y-5">
                                 <li>
-                                    <a href="#">Home</a>
+                                    <a href="{{ route('home') }}">Home</a>
                                 </li>
                                 <li>
-                                    <a href="#">About Us</a>
+                                    <a href="{{ route('home.courses') }}">Courses</a>
                                 </li>
                                 <li>
-                                    <a href="#">Pricing</a>
-                                </li>
-                                <li>
-                                    <a href="#">Courses</a>
-                                </li>
-                                <li>
-                                    <a href="#">Contact Us</a>
-                                </li>
-                                <li>
-                                    <a href="#">Blog</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="flex-1 lg:flex-none">
-                            <h4 class="mb-8 text-2xl font-bold text-white">Legal</h4>
-                            <ul class="list-item space-y-5">
-                                <li>
-                                    <a href="#">Legal</a>
-                                </li>
-                                <li>
-                                    <a href="#">Tearms of Use</a>
-                                </li>
-                                <li>
-                                    <a href="#">Tearm & Condition</a>
-                                </li>
-                                <li>
-                                    <a href="#">Payment Method</a>
-                                </li>
-                                <li>
-                                    <a href="#">Privacy Policy</a>
-                                </li>
-                                <li>
-                                    <a href="#">Privacy Policy</a>
+                                    <a href="{{ route('home.contact') }}">Contact Us</a>
                                 </li>
                             </ul>
                         </div>
@@ -313,7 +208,7 @@
             </div>
         </div>
         <div class="container border-t border-white border-opacity-[0.1] py-8 text-center text-base">
-            &copy; Copyright @php date("Y") @endphp | Edumim Template | All Rights Reserved
+            &copy; Copyright @php date("Y") @endphp | Royal Educity | All Rights Reserved
         </div>
     </footer>
 

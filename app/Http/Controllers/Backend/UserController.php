@@ -13,7 +13,12 @@ class UserController extends Controller
     //
     public function index(Request $request)
     {
-        return view("backend.student.dashboard");
+        $courseCount = Order::where("user_id", auth()->user()->id)->count();
+        $allCourseCount = Course::count();
+        return view("backend.student.dashboard", [
+            "courseCount" => $courseCount,
+            "allCourseCount" => $allCourseCount
+        ]);
     }
 
     public function myCourses(Request $request)
@@ -72,6 +77,23 @@ class UserController extends Controller
 
         if ($review) {
             return redirect()->back()->with("success", "Review Added");
+        } else {
+            return redirect()->back()->with("error", "Something went wrong");
+        }
+    }
+    public function writeComment(Request $request, Course $course)
+    {
+        $validated = $request->validate([
+            "comment" => "required|min:5"
+        ]);
+
+        $review = $course->comments()->create([
+            "user_id" => auth()->user()->id,
+            "comment" => $validated["comment"]
+        ]);
+
+        if ($review) {
+            return redirect()->back()->with("success", "Comment Added");
         } else {
             return redirect()->back()->with("error", "Something went wrong");
         }

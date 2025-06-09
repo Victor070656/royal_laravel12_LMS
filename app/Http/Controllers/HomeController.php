@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderPlaced;
 use App\Models\Category;
 use App\Models\Course;
 use App\Models\Order;
@@ -12,7 +13,7 @@ use Matscode\Paystack\Transaction;
 // Flutterwave
 // use Flutterwave\Flutterwave;
 use EdwardMuss\Rave\Facades\Rave as Flutterwave;
-
+use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
@@ -163,6 +164,12 @@ class HomeController extends Controller
                     "amount" => $course->price,
                     "reference" => $request->query('txref')
                 ]);
+                Mail::to([
+                    "support@royalsolutions.com.ng",
+                    "ikechukwuv052@gmail.com",
+                    // $course->user->email
+                ])
+                    ->send(new OrderPlaced($course));
 
                 if ($order) {
                     return redirect()->route("home.course.details", $course)->with("success", "Payment was successful!");

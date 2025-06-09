@@ -187,14 +187,19 @@
                                 </form>
                             </div>
                         @endif
-                        <div class="mt-5 border-t max-h-[400px] overflow-y-auto">
+                        <div class="mt-5 border-t max-h-[300px] py-2 overflow-y-auto">
                             @isset($course->review)
                                 @forelse ($course->review()->latest()->get() as $review)
                                     <div class="p-4 border-b rounded-xl">
+                                        {{-- Review Date --}}
+                                        @php
+                                            $reviewDate = Carbon\Carbon::parse($review->created_at);
+                                        @endphp
                                         <div class="flex gap-3">
-                                            <small>{{ $review->user->first_name . ' ' . $review->user->last_name }}</small>
+                                            <small
+                                                class="text-xs">{{ $review->user->first_name . ' ' . $review->user->last_name }}</small>
                                             <small>|</small>
-                                            <small>{{ date('d M Y', strtotime($review->created_at)) }}</small>
+                                            <small class="text-xs">{{ $reviewDate->diffForHumans() }}</small>
                                             <small>|</small>
                                             <span class="text-sm flex items-center gap-1">
                                                 <span class="font-semibold ">{{ $review->star }}</span>
@@ -220,18 +225,37 @@
                             <h2 class="text-xl font-semibold text-blue-600 ">Comments </h2>
 
                         </div>
-                        <div class="mt-5 border-t">
+                        <div class="mb-5">
+                            {{-- <h4 class="text-md font-semibold mb-4">Write a Comment</h4> --}}
+                            <form action="{{ route('student.comment.write', $course) }}" method="post">
+                                @csrf
+                                <flux:textarea label="Write a Comment" name="comment" class="mb-3" />
+                                <flux:button type="submit" class="cursor-pointer" size="sm" variant="primary">
+                                    Submit
+                                </flux:button>
+                            </form>
+                        </div>
+                        <div class="mt-5 border-t max-h-[300px] py-2 overflow-auto">
                             @isset($course->comments)
-                                @forelse ($course->comments as $comment)
+                                @forelse ($course->comments()->latest()->get() as $comment)
                                     <div class="p-4 border-b rounded-xl">
+                                        @php
+                                            $commentDate = Carbon\Carbon::parse($comment->created_at);
+                                        @endphp
                                         <div class="flex gap-3">
-                                            <small>{{ $comment->user->first_name . ' ' . $comment->user->last_name }}</small>
+                                            <small
+                                                class="text-xs">{{ $comment->user->first_name . ' ' . $comment->user->last_name }}</small>
                                             <small>|</small>
-                                            <small>{{ date('d M Y', strtotime($comment->created_at)) }}</small>
+                                            <small class="text-xs">{{ $commentDate->diffForHumans() }}</small>
                                         </div>
                                         <p class="">
                                             {{ $comment->comment }}
                                         </p>
+                                        @if ($comment->reply)
+                                            <p class="mt-3">
+                                                <span class="font-semibold">Reply: </span>{{ $comment->comment }}
+                                            </p>
+                                        @endif
                                     </div>
                                 @empty
                                     <p class="p-4">No Comment Yet!</p>

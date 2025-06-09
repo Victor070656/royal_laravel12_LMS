@@ -31,6 +31,7 @@ Route::middleware(['auth', 'verified', "isUser"])->group(function () {
     Route::get('/my-courses/{order}', [UserController::class, "viewCourse"])->name('student.course.details');
     Route::get('/lesson/{courseContent}/watch', [UserController::class, "watchLesson"])->name('student.lesson.watch');
     Route::post('/review/{course}', [UserController::class, "writeReview"])->name('student.review.write');
+    Route::post('/comment/{course}', [UserController::class, "writeComment"])->name('student.comment.write');
 });
 
 
