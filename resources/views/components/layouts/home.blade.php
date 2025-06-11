@@ -137,15 +137,16 @@
         class="bg-black bg-[url({{ asset('front/assets/images/all-img/footer-bg-1.html') }})] bg-cover bg-center bg-no-repeat">
         <div class="section-padding container">
             <div class="grid grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3">
-                <div class="single-footer">
-                    <div class="lg:max-w-[270px]">
+                <div class="">
+                    <div class="">
                         <a href="#" class="mb-10 block">
-                            <img src="assets/images/logo/footer-logo.svg" alt="">
+                            <img src="{{ asset('front/assets/images/logo/logo.png') }}" class="w-[46px] h-[46px] "
+                                alt="">
                         </a>
-                        <p>
-                            Lorem ipsum amet, consectetur adipiscing elit. Suspendis varius enim eros elementum
-                            tristique. Duis
-                            cursus.
+                        <p style="text-align: justify !important;">
+                            Royal Educity is your premier online education platform dedicated to providing
+                            world-class learning experiences. We connect ambitious learners with expert instructors
+                            globally, offering a wide range of courses accessible anytime, anywhere.
                         </p>
                         <ul class="flex space-x-4 pt-8">
                             <li>
@@ -166,9 +167,9 @@
                         </ul>
                     </div>
                 </div>
-                <div class="single-footer">
-                    <div class="flex space-x-[80px]">
-                        <div class="">
+                <div class="">
+                    <div class="">
+                        <div class="mx-auto lg:text-center ps-6 lg:ps-0">
                             <h4 class="mb-8 text-2xl font-bold text-white">Links</h4>
                             <ul class="list-item space-y-5">
                                 <li>
@@ -184,31 +185,25 @@
                         </div>
                     </div>
                 </div>
-                <div class="single-footer">
-                    <h4 class="mb-8 text-2xl font-bold text-white">Newsletter</h4>
+                <div class="">
+                    <h4 class="mb-8 text-2xl font-bold text-white">Contact Info</h4>
                     <div class="mb-8">
-                        Join over
-                        <span class="text-primary underline">68,000</span>
-                        people getting our emails Lorem ipsum dolor sit amet consectet
+                        Get in touch with us
                     </div>
-                    <div class="mb-4 flex items-center rounded-md bg-white py-[10px] pr-[10px] pl-6 shadow-e1">
-                        <div class="flex-none">
-                            <span class=" ">
-                                <img src="assets/images/icon/mail.svg" alt="">
-                            </span>
-                        </div>
-                        <div class="flex-1">
-                            <input type="text" placeholder="Enter your mail" class="border-none focus:ring-0">
-                        </div>
+                    <div class="mb-4">
+                        <h4 class="text-lg font-semibold text-white">Location</h4>
+                        <p class="mb-2 text-gray-200 text-xs">Suite C20 & C11 woji estate shopping plaza by alcon road,
+                            Woji Port Harcourt, Rivers State.</p>
+                        <h4 class="text-lg font-semibold text-white">Call Us</h4>
+                        <p class="mb-2 text-gray-200 text-xs">+234 818 2891 846, +234 904 3815 475</p>
+                        <h4 class="text-lg font-semibold text-white">Email</h4>
+                        <p class="mb-2 text-gray-200 text-xs">support@royalsolutions.com.ng</p>
                     </div>
-                    <button class="btn btn-primary block w-full text-center">
-                        Subscribe Now
-                    </button>
                 </div>
             </div>
         </div>
         <div class="container border-t border-white border-opacity-[0.1] py-8 text-center text-base">
-            &copy; Copyright @php date("Y") @endphp | Royal Educity | All Rights Reserved
+            &copy; Copyright @php echo date("Y"); @endphp | Royal Educity | All Rights Reserved
         </div>
     </footer>
 

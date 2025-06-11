@@ -291,10 +291,11 @@
                                                             <div
                                                                 class="rounded-[2px] overflow-hidden bg-opacity-10 bg-black h-[6px] relative flex-1">
                                                                 <div class="ani  h-[6px] bg-secondary block absolute left-0 top-1/2 -translate-y-1/2 "
-                                                                    data-progress="40"></div>
+                                                                    data-progress="{{ $perc5 }}"></div>
                                                             </div>
                                                             <div class="flex-none">
-                                                                <span class=" block mb-2  font-semibold">40%</span>
+                                                                <span
+                                                                    class=" block mb-2  font-semibold">{{ $perc5 }}%</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -327,10 +328,11 @@
                                                             <div
                                                                 class="rounded-[2px] overflow-hidden bg-opacity-10 bg-black h-[6px] relative flex-1">
                                                                 <div class="ani  h-[6px] bg-secondary block absolute left-0 top-1/2 -translate-y-1/2 "
-                                                                    data-progress="10"></div>
+                                                                    data-progress="{{ $perc4 }}"></div>
                                                             </div>
                                                             <div class="flex-none">
-                                                                <span class=" block mb-2  font-semibold">10%</span>
+                                                                <span
+                                                                    class=" block mb-2  font-semibold">{{ $perc4 }}%</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -363,10 +365,11 @@
                                                             <div
                                                                 class="rounded-[2px] overflow-hidden bg-opacity-10 bg-black h-[6px] relative flex-1">
                                                                 <div class="ani  h-[6px] bg-secondary block absolute left-0 top-1/2 -translate-y-1/2 "
-                                                                    data-progress="0"></div>
+                                                                    data-progress="{{ $perc3 }}"></div>
                                                             </div>
                                                             <div class="flex-none">
-                                                                <span class=" block mb-2  font-semibold">0%</span>
+                                                                <span
+                                                                    class=" block mb-2  font-semibold">{{ $perc3 }}%</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -399,10 +402,11 @@
                                                             <div
                                                                 class="rounded-[2px] overflow-hidden bg-opacity-10 bg-black h-[6px] relative flex-1">
                                                                 <div class="ani  h-[6px] bg-secondary block absolute left-0 top-1/2 -translate-y-1/2 "
-                                                                    data-progress="0"></div>
+                                                                    data-progress="{{ $perc2 }}"></div>
                                                             </div>
                                                             <div class="flex-none">
-                                                                <span class=" block mb-2  font-semibold">0%</span>
+                                                                <span
+                                                                    class=" block mb-2  font-semibold">{{ $perc2 }}%</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -435,10 +439,11 @@
                                                             <div
                                                                 class="rounded-[2px] overflow-hidden bg-opacity-10 bg-black h-[6px] relative flex-1">
                                                                 <div class="ani  h-[6px] bg-secondary block absolute left-0 top-1/2 -translate-y-1/2 "
-                                                                    data-progress="0"></div>
+                                                                    data-progress="{{ $perc1 }}"></div>
                                                             </div>
                                                             <div class="flex-none">
-                                                                <span class=" block mb-2  font-semibold">0%</span>
+                                                                <span
+                                                                    class=" block mb-2  font-semibold">{{ $perc1 }}%</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -451,7 +456,7 @@
                                                 <div
                                                     class="bg-white min-h-[219px] p-6 flex flex-col justify-center items-center shadow-box7 rounded space-y-3">
                                                     <h2>
-                                                        4.9
+                                                        {{ $rating }}
                                                     </h2>
                                                     <div class="flex space-x-3">
                                                         <iconify-icon icon="heroicons:star-20-solid"
@@ -465,7 +470,7 @@
                                                         <iconify-icon icon="heroicons:star-20-solid"
                                                             class=" text-tertiary"></iconify-icon>
                                                     </div>
-                                                    <span class=" block">(2 Review)</span>
+                                                    <span class=" block">({{ $count_review }} Review)</span>
                                                 </div>
                                             </div>
 
@@ -474,7 +479,49 @@
                                         <div class=" mt-8">
                                             <h4 class=" text-xl font-bold text-black">Reviews</h4>
                                             <ul class=" list space-y-6 mt-6">
-                                                <li class=" flex space-x-6 ">
+                                                @forelse ($course->review()->latest()->limit(5)->get() as $review)
+                                                    <li class=" flex space-x-6 ">
+                                                        <div class="flex-none">
+                                                            <div class="h-[72px] w-[72px] rounded-full">
+                                                                @if ($review->user->photo)
+                                                                    <img src="{{ asset('storage/' . $review->user->photo) }}"
+                                                                        alt=""
+                                                                        class=" object-cover w-full h-full rounded">
+                                                                @else
+                                                                    <div
+                                                                        class="h-full w-full rounded bg-secondary flex justify-center items-center">
+                                                                        <span
+                                                                            class="text-white">{{ $review->user->initials() }}</span>
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex-1">
+                                                            <div class="flex space-x-3 mb-4">
+                                                                @for ($i = 0; $i < $review->star; $i++)
+                                                                    <iconify-icon icon="heroicons:star-20-solid"
+                                                                        class=" text-tertiary"></iconify-icon>
+                                                                @endfor
+                                                                @for ($i = $review->star; $i < 5; $i++)
+                                                                    <iconify-icon icon="heroicons:star-20-solid"
+                                                                        class=" text-[#E6E6E6]"></iconify-icon>
+                                                                @endfor
+                                                            </div>
+                                                            <p>
+                                                                {{ $review->review }}
+                                                            </p>
+                                                            <div class="author mt-4">
+                                                                <span
+                                                                    class="block text-sm font-bold text-black">{{ $review->user->first_name . ' ' . $review->user->last_name }}</span>
+                                                                <span
+                                                                    class="block text-xs">{{ $review->created_at->format('M d, Y') }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                @empty
+                                                    <p class="text-center">No reviews yet!</p>
+                                                @endforelse
+                                                {{-- <li class=" flex space-x-6 ">
                                                     <div class="flex-none">
                                                         <div class="h-[72px] w-[72px] rounded-full">
                                                             <img src="assets/images/all-img/cmnt-1.png" alt=""
@@ -505,39 +552,8 @@
                                                             <span class="block">Jan 24, 2022</span>
                                                         </div>
                                                     </div>
-                                                </li>
-                                                <li class=" flex space-x-6 ">
-                                                    <div class="flex-none">
-                                                        <div class="h-[72px] w-[72px] rounded-full">
-                                                            <img src="assets/images/all-img/cmnt-2.png" alt=""
-                                                                class=" object-cover w-full h-full">
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex-1">
-                                                        <div class="flex space-x-3 mb-4">
-                                                            <iconify-icon icon="heroicons:star-20-solid"
-                                                                class=" text-tertiary"></iconify-icon>
-                                                            <iconify-icon icon="heroicons:star-20-solid"
-                                                                class=" text-tertiary"></iconify-icon>
-                                                            <iconify-icon icon="heroicons:star-20-solid"
-                                                                class=" text-tertiary"></iconify-icon>
-                                                            <iconify-icon icon="heroicons:star-20-solid"
-                                                                class=" text-tertiary"></iconify-icon>
-                                                            <iconify-icon icon="heroicons:star-20-solid"
-                                                                class=" text-tertiary"></iconify-icon>
-                                                        </div>
-                                                        <p>
-                                                            There are many variations of passages of Lorem Ipsum
-                                                            available, but the
-                                                            majority have suffered alteration.
-                                                        </p>
-                                                        <div class="author mt-4">
-                                                            <span class="block text-xl font-bold text-black">Daniel
-                                                                Smith</span>
-                                                            <span class="block">Jan 24, 2022</span>
-                                                        </div>
-                                                    </div>
-                                                </li>
+                                                </li> --}}
+
                                             </ul>
                                         </div>
                                     </div>
@@ -548,7 +564,7 @@
                 </div>
                 <div class="lg:col-span-4 col-span-12">
 
-                    <div class="sidebarWrapper space-y-[30px]">
+                    <div class="sidebarWrapper space-y-[30px] lg:sticky lg:top-[60px]">
                         <div class="wdiget custom-text space-y-5 ">
                             @if ($course->sections->first()?->courseContent->first())
                                 <a class="h-[220px]  rounded relative block"
@@ -561,15 +577,15 @@
                                 </a>
                             @endif
                             <h3>₦ {{ number_format($course->price) }}</h3>
-                            @if($check)
-                            <a href="#" class="btn btn-primary w-full text-center">Take Course</a>
+                            @if ($check)
+                                <a href="#" class="btn btn-primary w-full text-center">Take Course</a>
                             @else
-                            <form action="{{ route('home.course.buy', $course) }}" method="post">
-                                @csrf
-                                <button class="btn btn-primary w-full text-center ">
-                                    Enroll Now
-                                </button>
-                            </form>
+                                <form action="{{ route('home.course.buy', $course) }}" method="post">
+                                    @csrf
+                                    <button class="btn btn-primary w-full text-center ">
+                                        Enroll Now
+                                    </button>
+                                </form>
                             @endif
                             <ul class="list  ">
 
@@ -634,7 +650,7 @@
 
                         </div>
 
-                        <div class="wdiget">
+                        {{-- <div class="wdiget">
                             <h4 class=" widget-title">Related Courses</h4>
                             <ul class="list">
                                 <li
@@ -719,7 +735,7 @@
                                     </div>
                                 </li>
                             </ul>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>

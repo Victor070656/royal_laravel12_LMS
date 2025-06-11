@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Course;
 use App\Models\Order;
 use App\Models\User;
+use App\Models\Comment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -32,7 +33,7 @@ class AdminController extends Controller
     public function getUsers(Request $request)
     {
         $id = auth()->user()->id;
-        $users = User::latest()->whereNot("id", "=", $id)->paginate(2);
+        $users = User::latest()->whereNot("id", "=", $id)->paginate(30);
 
         return view("backend.admin.view-users", [
             "users" => $users
@@ -62,7 +63,7 @@ class AdminController extends Controller
 
     public function getCourses(Request $request)
     {
-        $courses = Course::latest()->paginate(5);
+        $courses = Course::latest()->paginate(20);
         return view("backend.admin.courses", [
             "courses" => $courses
         ]);
@@ -172,6 +173,18 @@ class AdminController extends Controller
         }
     }
 
+    public function viewCourse(Request $request, Course $course)
+    {
+
+        $rating = $course->review?->avg("star") ?? 0;
+        $review = $course->review?->count() ?? 0;
+        return view("backend.admin.view-course", [
+            "course" => $course,
+            "rating" => $rating,
+            "review" => $review
+        ]);
+    }
+
     public function deleteCourse(Request $request, Course $course)
     {
         return view("backend.admin.delete-course", [
@@ -211,5 +224,30 @@ class AdminController extends Controller
         $user->save();
 
         return redirect()->route("manager.users.view")->with("success", "User role updated successfully");
+    }
+    public function showReply(Request $request, Comment $comment)
+    {
+        return view("backend.admin.reply-comment", [
+            "comment" => $comment
+        ]);
+    }
+    public function replyComment(Request $request, Comment $comment)
+    {
+
+
+            $validated = $request->validate([
+                "reply" => "required"
+            ]);
+
+            $reply = $comment->update([
+                "reply" => $validated["reply"]
+            ]);
+
+            if($reply){
+                return redirect()->route("manager.course.view", $comment->course)->with("success", "Comment successfully replied");
+            }else{
+                return redirect()->route("manager.course.view", $comment->course)->with("error", "Comment reply failed");
+            }
+
     }
 }

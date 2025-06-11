@@ -72,8 +72,7 @@
                     <div class="mt-5">
                         <div class="flex items-center justify-between mb-3">
                             <h2 class="text-xl font-semibold text-blue-600 ">Course Modules</h2>
-                            <flux:button href="{{ route('instructor.course.add-section', $course) }}" wire:navigate
-                                icon="plus" variant="primary" size="sm">Add Section</flux:button>
+                            
                         </div>
                         <div id="accordion-open" data-accordion="open">
 
@@ -106,14 +105,7 @@
                                         aria-labelledby="accordion-open-heading-{{ $section->id }}">
                                         <div
                                             class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
-                                            <flux:button href="{{ route('instructor.section.edit', $section) }}"
-                                                wire:navigate icon="pencil" variant="primary" size="xs">
-                                                Edit Section
-                                            </flux:button>
-                                            <flux:button href="{{ route('instructor.section.add-content', $section) }}"
-                                                wire:navigate icon="plus" variant="primary" size="xs">
-                                                Add Content
-                                            </flux:button>
+                                            
                                             <div class="">
                                                 @forelse ($section->courseContent as $content)
                                                     <div class="p-4 flex items-center border-b justify-between">
@@ -135,19 +127,7 @@
                                                             @endif
                                                             <p class="">{{ $content->title }}</p>
                                                         </div>
-                                                        <div class="flex gap-4">
-
-                                                            <flux:button
-                                                                href="{{ route('instructor.content.edit', $content) }}"
-                                                                wire:navigate icon="pencil" variant="primary"
-                                                                size="xs">
-                                                            </flux:button>
-                                                            <flux:button
-                                                                href="{{ route('instructor.section.add-content', $section) }}"
-                                                                wire:navigate icon="trash" variant="danger"
-                                                                size="xs">
-                                                            </flux:button>
-                                                        </div>
+                                                        
                                                     </div>
                                                 @empty
                                                     <p class="p-4">No course content added!</p>
@@ -227,7 +207,7 @@
                                             <small>|</small>
                                             <small class="text-xs">{{ $commentDate->diffForHumans() }}</small>
                                             <small>|</small>
-                                            <a href="{{ route('instructor.comment.reply', $comment) }}"
+                                            <a href="{{ route('manager.comment.reply', $comment) }}"
                                                 class="text-blue-500 text-sm underline">Reply</a>
                                         </div>
                                         <p class="">

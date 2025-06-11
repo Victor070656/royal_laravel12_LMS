@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Comment;
 use App\Models\Course;
 use App\Models\CourseContent;
 use App\Models\Order;
@@ -35,7 +36,7 @@ class InstructorController extends Controller
 
     public function getCourses(Request $request)
     {
-        $courses = Course::latest()->where("user_id", "=", auth()->user()->id)->paginate(5);
+        $courses = Course::latest()->where("user_id", "=", auth()->user()->id)->paginate(15);
         return view("backend.instructor.courses", [
             "courses" => $courses
         ]);
@@ -46,8 +47,8 @@ class InstructorController extends Controller
             return redirect()->route("instructor.courses")->with("error", "You are not allowed to view a course that doesn't belong to you!");
         }
 
-        $rating = $course->reviews?->avg("star") ?? 0;
-        $review = $course->reviews?->count() ?? 0;
+        $rating = $course->review?->avg("star") ?? 0;
+        $review = $course->review?->count() ?? 0;
         return view("backend.instructor.view-course", [
             "course" => $course,
             "rating" => $rating,
@@ -204,6 +205,34 @@ class InstructorController extends Controller
             return redirect()->route("instructor.course.view", $courseContent->section->course)->with("success", "Content Updated");
         } else {
             return redirect()->route("instructor.course.view", $courseContent->section->course)->with("error", "Error updating content!");
+        }
+    }
+
+    public function showReply(Request $request, Comment $comment)
+    {
+        return view("backend.instructor.reply-comment", [
+            "comment" => $comment
+        ]);
+    }
+    public function replyComment(Request $request, Comment $comment)
+    {
+
+        if ($comment->course->user->id == auth()->user()->id) {
+            $validated = $request->validate([
+                "reply" => "required"
+            ]);
+
+            $reply = $comment->update([
+                "reply" => $validated["reply"]
+            ]);
+
+            if($reply){
+                return redirect()->route("instructor.course.view", $comment->course)->with("success", "Comment successfully replied");
+            }else{
+                return redirect()->route("instructor.course.view", $comment->course)->with("error", "Comment reply failed");
+            }
+        } else {
+            return redirect()->route("instructor.course.view", $comment->course)->with("error", "You are not allowed to reply this comment");
         }
     }
 }

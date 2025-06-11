@@ -11,10 +11,12 @@
                     For The Future
                 </h1>
                 <div class=" plain-text text-gray leading-[30px] mt-8 mb-14">
-                    It is long established fact that reader distracted by the readable content.
+                    Take our courses taught by industry experts, apply your skills in real world projects, and develop a
+                    portfolio designed to enhance your professional goals, whether you're just starting out or scaling
+                    new heights.
                 </div>
                 <div class="md:flex  md:space-x-4 space-y-3 md:space-y-0">
-                    <a href="#" class="btn btn-primary">Get Started Today &rarr;</a>
+                    <a href="{{ route('home.courses') }}" class="btn btn-primary">Get Started Today &rarr;</a>
                 </div>
             </div>
             <div class="imge-box absolute right-[-60px] top-1/2  -translate-y-1/2 hidden xl:block   ">
@@ -65,18 +67,19 @@
         </div>
         <div class="container">
             <div class="grid grid-cols-12 xl:gap-[70px] lg:gap-10 gap-6">
-                <div class="xl:col-span-7 lg:col-span-6 col-span-12">
+                <div class="xl:col-span-6 lg:col-span-6 col-span-12">
                     <img src="{{ asset('front/assets/images/all-img/about5.png') }}" alt="" />
                 </div>
-                <div class="xl:col-span-5 lg:col-span-6 col-span-12 ">
-                    <div class="mini-title">About Edumim</div>
+                <div class="xl:col-span-6 lg:col-span-6 col-span-12 ">
+                    <div class="mini-title">About Royal Educity</div>
                     <h4 class="column-title ">
                         You Can Learn Anything, Anytime From
                         <span class="shape-bg">
                             Anywhere</span>
                     </h4>
                     <div>
-                        There are many variations of passages of Lorem Ipsum available, but the majority have suffered.
+                        Royal Educity offers accessible, high-quality online education to anyone, anywhere, connecting
+                        learners with expert instructors globally.
                     </div>
                     <ul class=" list-item space-y-6 pt-8">
                         <li class="flex">
@@ -89,7 +92,11 @@
                             </div>
                             <div class="flex-1">
                                 <h4 class=" text-xl mb-1">All Classes Video Provided</h4>
-                                <div>There are many variations of passages of the Lorem Ipsum available.</div>
+                                <div>
+                                    Royal Educity provides 24/7 access to high-definition video lessons for all courses,
+                                    allowing learners to control their pace, review content, and even download lessons
+                                    for offline viewing.
+                                </div>
                             </div>
                         </li>
                         <li class="flex">
@@ -102,7 +109,11 @@
                             </div>
                             <div class="flex-1">
                                 <h4 class=" text-xl mb-1">Online Class From Expert Teachers</h4>
-                                <div>There are many variations of passages of the Lorem Ipsum available.</div>
+                                <div>
+                                    Royal Educity ensures top-tier education by featuring lessons directly from industry
+                                    professionals and certified educators who are passionate about sharing their
+                                    real-world expertise.
+                                </div>
                             </div>
                         </li>
                     </ul>
@@ -200,8 +211,10 @@
             </div>
         </div>
     </div>
+
+
     <!-- Team start -->
-    <div class=" section-padding">
+    {{-- <div class=" section-padding">
         <div class="container">
             <div class="text-center">
                 <div class="mini-title">Team Member</div>
@@ -493,7 +506,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
 
     <!-- accrodain start -->
@@ -510,48 +523,71 @@
                     <ul class="list accrodains space-y-[30px] lg:max-w-[470px]">
                         <li>
                             <button type="button" class="accrodain-button">
-                                <span>What does it take excellent author?</span>
+                                <span>1. What is Royal Educity?</span>
                                 <span class="icon-pm"></span>
                             </button>
                             <div class="content hidden">
-                                Learn at your own pace, move between multiple courses, or switch to a different course.
-                                Earn a certificate for every
-                                learning program that you complete at no additional cost.
+                                Royal Educity is your premier online education platform dedicated to providing
+                                world-class learning experiences. We connect ambitious learners with expert instructors
+                                globally, offering a wide range of courses accessible anytime, anywhere.
                             </div>
                         </li>
                         <li>
                             <button type="button" class="accrodain-button">
-                                <span>Who will view my content?
+                                <span>2. How do Royal Educity courses work?
                                 </span>
                                 <span class="icon-pm"></span>
                             </button>
                             <div class="content hidden">
-                                Learn at your own pace, move between multiple courses, or switch to a different course.
-                                Earn a certificate for every
-                                learning program that you complete at no additional cost.
+                                Our courses are delivered through high-definition video lessons that you can access
+                                24/7. You can pause, rewind, and review concepts at your own pace. Many lessons are also
+                                downloadable for offline viewing, so you can learn even without an internet connection.
                             </div>
                         </li>
                         <li>
                             <button type="button" class="accrodain-button">
-                                <span>What does it take become an author?
+                                <span>3. Can I learn at my own pace?
                                 </span>
                                 <span class="icon-pm"></span>
                             </button>
                             <div class="content hidden">
-                                Learn at your own pace, move between multiple courses, or switch to a different course.
-                                Earn a certificate for every
-                                learning program that you complete at no additional cost.
+                                Absolutely! All our courses are designed for self-paced learning. You have unlimited
+                                access to video lessons, allowing you to study when it's most convenient for you and
+                                review material as often as needed.
                             </div>
                         </li>
                         <li>
                             <button type="button" class="accrodain-button">
-                                <span>How to Change my Password easily?</span>
+                                <span>4. What are the technical requirements to take a course?</span>
                                 <span class="icon-pm"></span>
                             </button>
                             <div class="content hidden">
-                                Learn at your own pace, move between multiple courses, or switch to a different course.
-                                Earn a certificate for every
-                                learning program that you complete at no additional cost.
+                                You will need a stable internet connection, a computer or mobile device (tablet or
+                                smartphone), and a modern web browser. For an optimal experience, we recommend a
+                                high-definition screen. Some courses may have specific software requirements, which will
+                                be clearly outlined in the course description.
+                            </div>
+                        </li>
+                        <li>
+                            <button type="button" class="accrodain-button">
+                                <span>5. How do I enroll in a course?</span>
+                                <span class="icon-pm"></span>
+                            </button>
+                            <div class="content hidden">
+                                Enrolling is simple! Browse our course catalog, select the course you're interested in,
+                                and follow the easy steps to register and make payment. You'll gain immediate access to
+                                your course materials once enrolled.
+                            </div>
+                        </li>
+                        <li>
+                            <button type="button" class="accrodain-button">
+                                <span>6. What if I have questions during a course?</span>
+                                <span class="icon-pm"></span>
+                            </button>
+                            <div class="content hidden">
+                                Our instructors are available to provide support and answer your questions. You can
+                                typically engage with them by dropping your question in the comment section or
+                                contacting your instructor via email.
                             </div>
                         </li>
                     </ul>

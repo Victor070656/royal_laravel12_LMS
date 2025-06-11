@@ -253,7 +253,7 @@
                                         </p>
                                         @if ($comment->reply)
                                             <p class="mt-3">
-                                                <span class="font-semibold">Reply: </span>{{ $comment->comment }}
+                                                <span class="font-semibold text-sm">Reply: </span>{{ $comment->reply }}
                                             </p>
                                         @endif
                                     </div>

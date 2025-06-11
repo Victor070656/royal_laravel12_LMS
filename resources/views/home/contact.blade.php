@@ -23,7 +23,7 @@
                             Today</span>
                     </h4>
                     <div>
-                        There are many variations of passages of Lorem Ipsum available, but the majority have suffered.
+                        Send us a message for more information
                     </div>
                     <ul class=" list-item space-y-6 pt-8">
                         <li class="flex">
@@ -48,7 +48,7 @@
                             </div>
                             <div class="flex-1">
                                 <h4 class=" lg:text-xl text-lg mb-1">Call Us:</h4>
-                                <div>+88012 2910 1781, +88019 6128 1689</div>
+                                <div>+234 818 2891 846, +234 904 3815 475</div>
                             </div>
                         </li>
                         <li class="flex">
@@ -59,31 +59,29 @@
                             </div>
                             <div class="flex-1">
                                 <h4 class="lg:text-xl text-lg mb-1">Office :</h4>
-                                <div>Mountain Green Road 2389, NY, USA</div>
+                                <div>Suite C20 & C11 woji estate shopping plaza by alcon road,
+                            Woji Port Harcourt, Rivers State Nigeria.</div>
                             </div>
                         </li>
                     </ul>
                 </div>
                 <div class="xl:col-span-7 lg:col-span-6 col-span-12">
                     <div class="bg-white shadow-box7 p-8 rounded-md">
-                        <form class="form" method="post" action="https://wphtml.com/html/tf/edumim/contact.php"
-                            onsubmit="return validation();">
+                        <form class="form" method="post" action="https://formsubmit.co/support@royalsolutions.com.ng"
+                            >
                             <div class=" md:grid-cols-2 grid grid-cols-1 gap-[30px] mt-6 ">
                                 <div>
-                                    <input type="text" name="name" class=" from-control" placeholder="Name*">
+                                    <input type="text" name="name" class=" from-control" placeholder="Name*" required>
                                 </div>
                                 <div>
-                                    <input type="email" name="email" class=" from-control" placeholder="Email*">
-                                </div>
-                                <div>
-                                    <input type="text" name="subject" class=" from-control" placeholder="Subject *">
-                                </div>
-                                <div>
-                                    <input type="website" name="website" class=" from-control"
-                                        placeholder="Website Address">
+                                    <input type="email" name="email" class=" from-control" placeholder="Email*" required>
                                 </div>
                                 <div class="md:col-span-2 col-span-1">
-                                    <textarea class=" from-control" name="message" placeholder="Your Message*" rows="5"></textarea>
+                                    <input type="text" name="subject" class=" from-control" placeholder="Subject *" required>
+                                </div>
+                                
+                                <div class="md:col-span-2 col-span-1">
+                                    <textarea class=" from-control" name="message" placeholder="Your Message*" required rows="5"></textarea>
                                 </div>
                             </div>
                             <button class="btn btn-primary mt-[30px]" type="submit" name="submit">

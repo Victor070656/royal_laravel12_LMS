@@ -58,6 +58,8 @@ Route::middleware(['auth', 'verified', "isInstructor"])->prefix("instructor")->g
     Route::post("/section/{section}/add-content", [InstructorController::class, "createContent"])->name("instructor.section.add-content");
     Route::get("/content/{courseContent}/edit", [InstructorController::class, "editContent"])->name("instructor.content.edit");
     Route::put("/content/{courseContent}/edit", [InstructorController::class, "updateContent"])->name("instructor.content.edit");
+    Route::get("/comment/{comment}/reply", [InstructorController::class, "showReply"])->name("instructor.comment.reply");
+    Route::patch("/comment/{comment}/reply", [InstructorController::class, "replyComment"])->name("instructor.comment.reply");
 });
 
 
@@ -79,11 +81,14 @@ Route::middleware(['auth', 'verified', "isAdmin"])->prefix("manager")->group(fun
     Route::post("/categories", [AdminController::class, "createCategory"])->name("manager.categories.index");
     Route::get("/categories/{category}/edit", [AdminController::class, "editCategory"])->name("manager.categories.edit");
     Route::put("/categories/{category}/edit", [AdminController::class, "updateCategory"])->name("manager.categories.edit");
+    Route::get("/course/{course}", [AdminController::class, "viewCourse"])->name("manager.course.view");
     Route::get("/course/{course}/edit", [AdminController::class, "editCourse"])->name("manager.course.edit");
     Route::put("/course/{course}/edit", [AdminController::class, "updateCourse"])->name("manager.course.edit");
     Route::get("/course/{course}/delete", [AdminController::class, "deleteCourse"])->name("manager.course.delete");
     Route::delete("/course/{course}/delete", [AdminController::class, "destroyCourse"])->name("manager.course.delete");
     Route::get("/courses", [AdminController::class, "getCourses"])->name("manager.courses");
+    Route::get("/comment/{comment}/reply", [AdminController::class, "showReply"])->name("manager.comment.reply");
+    Route::patch("/comment/{comment}/reply", [AdminController::class, "replyComment"])->name("manager.comment.reply");
 });
 
 

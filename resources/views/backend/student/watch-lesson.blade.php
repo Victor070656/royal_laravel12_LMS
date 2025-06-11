@@ -12,7 +12,7 @@
                         {{-- <video class="w-full h-full object-fit-cover rounded-xl" controls>
                             <source src="https://drive.google.com/file/d/1jxXNUMqfzLT7A64gJtPXLpYVQmiLSyOA/preview" />
                         </video> --}}
-                        <div class="absolute bg-transparent w-48 h-48 top-0 right-0"></div>
+                        {{-- <div class="absolute bg-transparent w-48 h-48 top-0 right-0"></div> --}}
                     </div>
                 @else
                     <img class="w-full aspect-video object-fit-cover rounded-xl"
@@ -118,7 +118,7 @@
 
                     </div>
 
-                    
+
 
 
                 </div>

@@ -43,9 +43,12 @@
                                 <td class="p-3">{{ $course->requirements }}</td>
                                 <td class="p-3">{{ $course->price }}</td>
                                 <td class="p-3">
-                                    <flux:button variant="primary" size="xs"
-                                        href="{{ route('manager.course.edit', $course) }}">Edit</flux:button>
-                                    <flux:button variant="danger" size="xs" href="{{ route('manager.course.delete', $course) }}">Delete</flux:button>
+                                    <flux:button variant="primary" size="xs" icon="eye" title="View"
+                                        href="{{ route('manager.course.view', $course) }}"></flux:button>
+                                    <flux:button variant="primary" size="xs" icon="pencil" title="Edit"
+                                        href="{{ route('manager.course.edit', $course) }}"></flux:button>
+                                    <flux:button variant="danger" size="xs" icon="trash" title="Delete"
+                                        href="{{ route('manager.course.delete', $course) }}"></flux:button>
                                 </td>
                             </tr>
                         @endforeach

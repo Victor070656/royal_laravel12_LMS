@@ -48,9 +48,9 @@ class HomeController extends Controller
                 ->orWhereLike("long_desc", "%$search%")
                 ->orWhereLike("scheme", "%$search%")
                 ->orWhereLike("requirements", "%$search%")
-                ->latest()->paginate(6);
+                ->latest()->paginate(12);
         } else {
-            $courses = Course::latest()->paginate(6);
+            $courses = Course::latest()->paginate(12);
         }
         // dd($courses);
         return view("home.courses", [
@@ -70,10 +70,25 @@ class HomeController extends Controller
 
         $rating = 0;
         $count_review = 0;
+        $perc5 = 0;
+        $perc4 = 0;
+        $perc3 = 0;
+        $perc2 = 0;
+        $perc1 = 0;
         if (isset($course->review)) {
             $count_review = $course->review->count();
+            $perc5Count = $course->review->where("star", "=", 5)->count() ?? 0;
+            $perc4Count = $course->review->where("star", "=", 4)->count() ?? 0;
+            $perc3Count = $course->review->where("star", "=", 3)->count() ?? 0;
+            $perc2Count = $course->review->where("star", "=", 2)->count() ?? 0;
+            $perc1Count = $course->review->where("star", "=", 1)->count() ?? 0;
         }
         if ($count_review > 0) {
+            $perc5 = ($perc5Count / $count_review) * 100;
+            $perc4 = ($perc4Count / $count_review) * 100;
+            $perc3 = ($perc3Count / $count_review) * 100;
+            $perc2 = ($perc2Count / $count_review) * 100;
+            $perc1 = ($perc1Count / $count_review) * 100;
             foreach ($course->review as $review) {
                 $rating += $review->star;
             }
@@ -81,7 +96,7 @@ class HomeController extends Controller
         } else {
             $rating = 0;
         }
-        $rating = number_format($rating, 1);
+        $rating = round($rating, 1);
 
         $category = Category::where('id', '=', $course->category_id)->get();
 
@@ -118,7 +133,12 @@ class HomeController extends Controller
             "requirements" => $requirements,
             "schemes" => $schemes,
             "learned" => $learned,
-            "check" => $check
+            "check" => $check,
+            "perc5" => $perc5,
+            "perc4" => $perc4,
+            "perc3" => $perc3,
+            "perc2" => $perc2,
+            "perc1" => $perc1,
         ]);
     }
 
