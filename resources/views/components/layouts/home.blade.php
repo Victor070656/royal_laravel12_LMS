@@ -13,6 +13,13 @@
     <link rel="stylesheet" href="{{ asset('front/assets/css/rt-plugins.css') }}">
     <link rel="stylesheet" href="{{ asset('front/assets/css/app.css') }}">
 
+    <meta name="apple-mobile-web-app-status-bar" content="#364153">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#364153">
+    <link rel="manifest" href="/manifest.json">
+
+    <link rel="apple-touch-icon" href="/front/assets/images/logo/logo.png">
+    <link rel="apple-touch-startup-image" href="/front/assets/images/logo/logo.png">
 </head>
 
 <body class=" font-gilroy font-medium text-gray text-lg leading-[27px]">
@@ -209,6 +216,7 @@
 
     <div class="rt-mobile-menu-overlay"></div>
     <!-- scripts -->
+    @vite(['resourses/js/app.js'])
     <script src="{{ asset('front/assets/js/popper.min.js') }}"></script>
     <script src="{{ asset('front/assets/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('front/assets/js/rt-plugins.js') }}"></script>

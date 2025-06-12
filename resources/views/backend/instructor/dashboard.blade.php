@@ -49,8 +49,8 @@
                             {{-- @dd($course->user) --}}
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                                 <td class="p-3">
-                                    <img src="{{ $course->thumbnail ? asset('storage/' . $course->thumbnail) : '' }}"
-                                        alt="" class="relative aspect-video h-10 rounded-md">
+                                    <img src="{{ $course->thumbnail ? asset($course->thumbnail) : '' }}" alt=""
+                                        class="relative aspect-video object-cover h-10 rounded-md">
 
                                 </td>
                                 <td class="p-3">

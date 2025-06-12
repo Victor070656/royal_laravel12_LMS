@@ -11,8 +11,7 @@
                 <p class="my-4 text-green-500">{{ session('success') }}</p>
             @endsession
             <div class="mb-3">
-                <img class="w-full aspect-video object-fit-cover rounded-xl"
-                    src="{{ asset('storage/' . $course->thumbnail) }}" />
+                <img class="w-full aspect-video object-cover rounded-xl" src="{{ asset($course->thumbnail) }}" />
                 <div class="py-5">
                     <div class="flex gap-3 items-center">
                         <span class="text-sm">

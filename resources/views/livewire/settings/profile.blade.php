@@ -56,7 +56,7 @@ new class extends Component {
                 'first_name' => ['required', 'string', 'max:255'],
                 'last_name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
-                'photo' => ['nullable', 'image', 'max:2048'], // Adjust max as needed
+                'photo' => ['nullable', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'], // Adjust max as needed
                 'phone' => ['nullable', 'string', 'max:255'],
                 'bio' => ['nullable', 'string'],
                 'gender' => ['nullable', 'string'],
@@ -69,7 +69,23 @@ new class extends Component {
             ]);
 
             if ($this->photo) {
-                $validated['photo'] = $this->photo->store('photos', 'public'); // Store in storage/app/public/photos
+                // $validated['photo'] = $this->photo->store('photos', 'public'); // Store in storage/app/public/photos
+                $path = $this->photo->store('photos', 'public'); // Store in storage/app/public/photos
+                $sourcePath = storage_path('app/public/' . $path);
+                $destinationPath = public_path('uploads/' . $path);
+
+                // Ensure destination folder exists
+                if (!file_exists(dirname($destinationPath))) {
+                    mkdir(dirname($destinationPath), 0755, true);
+                }
+
+                copy($sourcePath, $destinationPath);
+
+                // $originalName = $this->photo->getClientOriginalName();
+                // $extension = pathinfo($originalName, PATHINFO_EXTENSION) ?: 'jpg'; // fallback to jpg if not found
+                // $filename = time() . '.' . $extension;
+                // $this->photo->move(public_path('uploads/photos'), $filename);
+                $validated['photo'] = 'uploads/' . $path;
             } else {
                 $validated['photo'] = $user->photo;
             }
@@ -158,7 +174,7 @@ new class extends Component {
             @if ($photo instanceof \Livewire\TemporaryUploadedFile)
                 <img src="{{ $photo->temporaryUrl() }}" class="h-16 w-16 rounded-full mt-2">
             @elseif (auth()->user()->photo)
-                <img src="{{ asset('storage/' . auth()->user()->photo) }}" class="h-16 w-16 rounded-full mt-2">
+                <img src="{{ asset(auth()->user()->photo) }}" class="h-16 w-16 rounded-full mt-2">
             @endif
             <div class="py-3" wire:loading wire:target="photo">
                 <span class="text-green-500 text-xs">Loading....</span>

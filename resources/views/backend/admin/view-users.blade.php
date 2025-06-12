@@ -28,7 +28,7 @@
                             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                                 <td class="p-3 flex items-center gap-2">
                                     @if ($user->photo)
-                                        <img src="{{ $user->photo ? asset('storage/' . $user->photo) : '' }}"
+                                        <img src="{{ $user->photo ? asset($user->photo) : '' }}"
                                             alt="" class="w-8 h-8 rounded-full">
                                     @endif
                                     {{ $user->first_name }}

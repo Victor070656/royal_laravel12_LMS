@@ -92,7 +92,12 @@ class AdminController extends Controller
             "price" => "required|numeric"
         ]);
 
-        $validated["thumbnail"] = $request->file("thumbnail")->store("thumbnails", "public");
+        // $validated["thumbnail"] = $request->file("thumbnail")->store("thumbnails", "public");
+        $filename = time() . '.' . $request->file("thumbnail")->getClientOriginalExtension();
+        $request->file("thumbnail")->move(public_path('uploads/thumbnails'), $filename);
+
+        $validated["thumbnail"] = 'uploads/thumbnails/' . $filename;
+
 
         $course = Course::create($validated);
 
@@ -118,7 +123,16 @@ class AdminController extends Controller
             "price" => "required|numeric"
         ]);
 
-        $validated["thumbnail"] = $request->file("thumbnail") ? $request->file("thumbnail")->store("thumbnails", "public") : $course->thumbnail;
+        // $validated["thumbnail"] = $request->file("thumbnail") ? $request->file("thumbnail")->store("thumbnails", "public") : $course->thumbnail;
+        if ($request->file('thumbnail')) {
+            $file = $request->file('thumbnail');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/thumbnails'), $filename);
+            $validated["thumbnail"] = 'uploads/thumbnails/' . $filename;
+        } else {
+            $validated["thumbnail"] = $course->thumbnail;
+        }
+
 
         $update = $course->update($validated);
 
@@ -198,8 +212,8 @@ class AdminController extends Controller
         $destroy = $course->delete();
 
         if ($destroy) {
-            if (file_exists(asset("storage/" . $thumb))) {
-                unlink(asset("storage/" . $thumb));
+            if (file_exists(asset($thumb))) {
+                unlink(asset($thumb));
             }
             return redirect()->route("manager.courses")->with("success", "Course deleted successfully");
         } else {

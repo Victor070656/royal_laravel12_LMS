@@ -79,7 +79,12 @@ class InstructorController extends Controller
         ]);
 
         $validated["user_id"] = auth()->user()->id;
-        $validated["thumbnail"] = $request->file("thumbnail")->store("thumbnails", "public");
+        // $validated["thumbnail"] = $request->file("thumbnail")->store("thumbnails", "public");
+        $filename = time() . '.' . $request->file("thumbnail")->getClientOriginalExtension();
+        $request->file("thumbnail")->move(public_path('uploads/thumbnails'), $filename);
+
+        $validated["thumbnail"] = 'uploads/thumbnails/' . $filename;
+
 
         $course = Course::create($validated);
 
@@ -109,7 +114,16 @@ class InstructorController extends Controller
             return redirect()->route("instructor.courses")->with("error", "You are not allowed to edit a course that doesn't belong to you!");
         }
 
-        $validated["thumbnail"] = $request->file("thumbnail") ? $request->file("thumbnail")->store("thumbnails", "public") : $course->thumbnail;
+        // $validated["thumbnail"] = $request->file("thumbnail") ? $request->file("thumbnail")->store("thumbnails", "public") : $course->thumbnail;
+        if ($request->file('thumbnail')) {
+            $file = $request->file('thumbnail');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/thumbnails'), $filename);
+            $validated["thumbnail"] = 'uploads/thumbnails/' . $filename;
+        } else {
+            $validated["thumbnail"] = $course->thumbnail;
+        }
+
 
         $update = $course->update($validated);
 
@@ -117,6 +131,32 @@ class InstructorController extends Controller
             return redirect()->route("instructor.courses")->with("success", "Course updated successfully");
         } else {
             return redirect()->route("instructor.courses")->with("error", "Course update failed");
+        }
+    }
+
+    public function deleteCourse(Request $request, Course $course)
+    {
+        return view("backend.instructor.delete-course", [
+            "course" => $course
+        ]);
+    }
+
+    public function destroyCourse(Request $request, Course $course)
+    {
+        if($course->user->id != auth()->user()->id){
+            return redirect()->route("instructor.courses")->with("error", "You are not allowed to delete a course that doesn't belong to you!");
+        }
+
+        $thumb = $course->thumbnail;
+        $destroy = $course->delete();
+
+        if ($destroy) {
+            if (file_exists(asset($thumb))) {
+                unlink(asset($thumb));
+            }
+            return redirect()->route("instructor.courses")->with("success", "Course deleted successfully");
+        } else {
+            return redirect()->route("instructor.courses")->with("error", "Course delete failed");
         }
     }
 

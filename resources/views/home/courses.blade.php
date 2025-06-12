@@ -44,7 +44,7 @@
                                 } else {
                                     $rating = 0;
                                 }
-                                $rating = number_format($rating, 1);
+                                $rating = round($rating, 1);
 
                                 $category = \App\Models\Category::where('id', '=', $course->category_id)->get();
                             @endphp
@@ -52,7 +52,7 @@
                                 <a class=" bg-white shadow-box2 rounded-[8px] transition duration-100 hover:shadow-sm block   mb-5 "
                                     href="{{ route('home.course.details', $course) }}">
                                     <div class="course-thumb h-[248px] rounded-t-[8px]  relative">
-                                        <img src="{{ asset('storage/' . $course->thumbnail) }}" alt=""
+                                        <img src="{{ asset($course->thumbnail) }}" alt=""
                                             class=" w-full h-full object-cover rounded-t-[8px]">
                                         <span
                                             class="bg-secondary py-1 px-3 text-lg font-semibold rounded text-white absolute left-6 top-6">{{ $category->first()->category_name }}</span>

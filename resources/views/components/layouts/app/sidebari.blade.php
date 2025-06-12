@@ -13,16 +13,14 @@
 
             <flux:navlist variant="outline">
                 <flux:navlist.group heading="Instructor" class="grid">
+                    <flux:navlist.item icon="home" :href="route('home')" :current="request()->routeIs('home')" >{{ __('Home') }}</flux:navlist.item>
                     <flux:navlist.item icon="home" :href="route('instructor.index')" :current="request()->routeIs('instructor.index')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                    <flux:navlist.item icon="document-plus" :href="route('instructor.course.add')"
+                        :current="request()->routeIs('instructor.course.add')" wire:navigate>{{ __('Add Course') }}</flux:navlist.item>
+                    <flux:navlist.item icon="document" :href="route('instructor.courses')"
+                        :current="request()->routeIs('instructor.courses')" wire:navigate>{{ __('Courses') }}</flux:navlist.item>
                 </flux:navlist.group>
-                <flux:navlist.group  class="grid">
-                <flux:navlist.item icon="document-plus" :href="route('instructor.course.add')"
-                    :current="request()->routeIs('instructor.course.add')" wire:navigate>{{ __('Add Course') }}</flux:navlist.item>
-            </flux:navlist.group>
-            <flux:navlist.group  class="grid">
-                <flux:navlist.item icon="document" :href="route('instructor.courses')"
-                    :current="request()->routeIs('instructor.courses')" wire:navigate>{{ __('Courses') }}</flux:navlist.item>
-            </flux:navlist.group>
+                
             </flux:navlist>
 
             <flux:spacer />

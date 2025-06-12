@@ -7,7 +7,7 @@
             <div class="py-30 text-center">
                 <h2 class="text-xl">Are you sure you want to delete this course?</h2>
                 <p class="mb-4">This action can't be undone.</p>
-                <form action="{{ route('manager.course.delete', $course) }}" method="post">
+                <form action="{{ route('instructor.course.delete', $course) }}" method="post">
                     @csrf
                     @method('delete')
                     <flux:button type="submit" variant="danger">Delete</flux:button>

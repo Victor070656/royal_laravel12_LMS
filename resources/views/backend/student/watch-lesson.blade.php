@@ -15,8 +15,8 @@
                         {{-- <div class="absolute bg-transparent w-48 h-48 top-0 right-0"></div> --}}
                     </div>
                 @else
-                    <img class="w-full aspect-video object-fit-cover rounded-xl"
-                        src="{{ asset('storage/' . $course->thumbnail) }}" />
+                    <img class="w-full aspect-video object-cover rounded-xl"
+                        src="{{ asset($course->thumbnail) }}" />
                     <a href="{{ $lesson->link }}" class="text-semibold text-blue-500 mt-4 text-decoration-underline"
                         target="_blank">View Material</a>
                 @endif

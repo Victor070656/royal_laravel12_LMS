@@ -10,7 +10,7 @@
                     <div class=" rounded-xl border border-neutral-200 dark:border-neutral-700">
                         <a href="{{ route('student.course.details', $order) }}">
 
-                            <img src="{{ asset('storage/' . $order->course->thumbnail) }}" alt=""
+                            <img src="{{ asset($order->course->thumbnail) }}" alt=""
                                 class="w-full aspect-video object-cover rounded-t-xl">
                             <div class="p-4">
                                 <h4 class="text-lg font-semibold truncate">{{ $order->course->course_name }}</h4>

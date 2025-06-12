@@ -24,8 +24,8 @@
                 <div class="lg:col-span-8 col-span-12">
                     <div class="single-course-details">
                         <div class="xl:h-[470px] h-[350px] mb-10 course-main-thumb">
-                            <img src="{{ asset('storage/' . $course->thumbnail) }}" alt=""
-                                class=" rounded-md object-fut w-full h-full block">
+                            <img src="{{ asset($course->thumbnail) }}" alt=""
+                                class=" rounded-md object-cover w-full h-full block">
                         </div>
                         <div class=" mb-6">
                             <span
@@ -38,7 +38,7 @@
                                 <div class="flex-none">
                                     @if ($course->user->photo)
                                         <div class="h-12 w-12 rounded">
-                                            <img src="{{ asset('storage/' . $course->user->photo) }}" alt=""
+                                            <img src="{{ asset($course->user->photo) }}" alt=""
                                                 class=" object-cover w-full h-full rounded">
                                         </div>
                                     @else
@@ -196,8 +196,8 @@
                                             <div class="h-[310px] w-[270px] flex-none rounded mb-5 md:mb-0">
 
                                                 @if ($course->user->photo)
-                                                    <img src="{{ asset('storage/' . $course->user->photo) }}"
-                                                        alt="" class=" object-cover w-full h-full rounded">
+                                                    <img src="{{ asset($course->user->photo) }}" alt=""
+                                                        class=" object-cover w-full h-full rounded">
                                                 @else
                                                     <div
                                                         class="h-full w-full rounded bg-secondary flex justify-center items-center">
@@ -484,7 +484,7 @@
                                                         <div class="flex-none">
                                                             <div class="h-[72px] w-[72px] rounded-full">
                                                                 @if ($review->user->photo)
-                                                                    <img src="{{ asset('storage/' . $review->user->photo) }}"
+                                                                    <img src="{{ asset($review->user->photo) }}"
                                                                         alt=""
                                                                         class=" object-cover w-full h-full rounded">
                                                                 @else
@@ -569,7 +569,7 @@
                             @if ($course->sections->first()?->courseContent->first())
                                 <a class="h-[220px]  rounded relative block"
                                     href="{{ $course->sections->first()?->courseContent->first()->link }}">
-                                    <img src="{{ asset('storage/' . $course->thumbnail) }}" alt=""
+                                    <img src="{{ asset($course->thumbnail) }}" alt=""
                                         class=" block w-full h-full object-cover rounded " />
                                     <div class=" absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
                                         <img src="{{ asset('front/assets/images/svg/play.svg') }}" alt="">
@@ -578,7 +578,7 @@
                             @endif
                             <h3>₦ {{ number_format($course->price) }}</h3>
                             @if ($check)
-                                <a href="#" class="btn btn-primary w-full text-center">Take Course</a>
+                                <a href="{{route('student.courses')}}" class="btn btn-primary w-full text-center">Take Course</a>
                             @else
                                 <form action="{{ route('home.course.buy', $course) }}" method="post">
                                     @csrf

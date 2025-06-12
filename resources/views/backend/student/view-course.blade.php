@@ -11,8 +11,7 @@
                 <p class="my-4 text-green-500">{{ session('success') }}</p>
             @endsession
             <div class="mb-3">
-                <img class="w-full aspect-video object-fit-cover rounded-xl"
-                    src="{{ asset('storage/' . $course->thumbnail) }}" />
+                <img class="w-full aspect-video object-cover rounded-xl" src="{{ asset($course->thumbnail) }}" />
                 <div class="py-5">
                     <div class="flex gap-3 items-center">
                         <span class="text-sm">
@@ -167,7 +166,7 @@
                                 <flux:icon.star variant="micro" class="text-orange-500" />
                             </span>
                         </div>
-                        @if (!$hasReviewed)
+                        @if ($hasReviewed == false)
                             <div class="mb-5">
                                 <h4 class="text-md font-semibold mb-4">Write a Review</h4>
                                 <form action="{{ route('student.review.write', $course) }}" method="post">

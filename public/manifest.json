@@ -1,0 +1,33 @@
+{
+    "name": "Royal Educity",
+    "short_name": "Royal Educity",
+    "description": "Online learning platform for you",
+    "start_url": "https://app.royalsolutions.com.ng",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#364153",
+    "icons": [
+        {
+            "src": "/front/assets/images/logo/logo.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ],
+    "orientation": "portrait-primary",
+    "lang": "en-US",
+    "dir": "ltr",
+    "related_applications": ["Udemy", "Coursera"],
+    "developer": {
+        "name": "Royal Solutions",
+        "url": "https://royalsolutions.com.ng"
+    },
+    "version": "1.0.0",
+    "keywords": [
+        "education",
+        "online learning",
+        "e-learning",
+        "courses",
+        "training"
+    ],
+    "categories": ["education", "online-learning", "e-learning"]
+}

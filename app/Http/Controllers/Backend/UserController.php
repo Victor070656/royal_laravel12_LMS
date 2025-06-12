@@ -40,7 +40,7 @@ class UserController extends Controller
         // dd($course->review->where("user_id", "=", auth()->user()->id));
         $rating = $course->review?->avg("star") ?? 0;
         $review = $course->review?->count() ?? 0;
-        $hasReviewed = $course->review->where("user_id", "=", auth()->user()->id);
+        $hasReviewed = $course->review->where("user_id", "=", auth()->user()->id)->count() > 0 ? true : false;
         return view("backend.student.view-course", [
             "course" => $course,
             "rating" => $rating,

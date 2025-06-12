@@ -50,8 +50,8 @@
                         type="text" placeholder="2h 45m" class="w-full mb-4" />
                     <flux:input label="Thumbnail" name="thumbnail" type="file" accept="image/*"
                         placeholder="Choose Thumbnail" class="w-full mb-4" />
-                    <img src="{{ asset('storage/' . $course->thumbnail) }}" alt=""
-                        class="aspect-video h-14 rounded-lg mb-3">
+                    <img src="{{ asset($course->thumbnail) }}" alt=""
+                        class="aspect-video object-cover h-14 rounded-lg mb-3">
                     <flux:input label="Price (₦) *" name="price" value="{{ $course->price }}" required type="number"
                         placeholder="5000" class="w-full mb-4" />
                     <flux:button icon="pencil" type="submit">Edit Course</flux:button>

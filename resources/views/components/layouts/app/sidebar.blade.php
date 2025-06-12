@@ -15,22 +15,15 @@
 
         <flux:navlist variant="outline">
             <flux:navlist.group heading="Admin" class="grid">
+                <flux:navlist.item icon="home" :href="route('home')" :current="request()->routeIs('home')" >{{ __('Home') }}</flux:navlist.item>
                 <flux:navlist.item icon="home" :href="route('manager.index')"
                     :current="request()->routeIs('manager.index')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
-            </flux:navlist.group>
-            <flux:navlist.group  class="grid">
                 <flux:navlist.item icon="users" :href="route('manager.users.view')"
                     :current="request()->routeIs('manager.users.view')" wire:navigate>{{ __('Users') }}</flux:navlist.item>
-            </flux:navlist.group>
-            <flux:navlist.group  class="grid">
                 <flux:navlist.item icon="document-plus" :href="route('manager.categories.index')"
                     :current="request()->routeIs('manager.categories.index')" wire:navigate>{{ __('Categories') }}</flux:navlist.item>
-            </flux:navlist.group>
-            <flux:navlist.group  class="grid">
                 <flux:navlist.item icon="document-plus" :href="route('manager.course.add')"
                     :current="request()->routeIs('manager.course.add')" wire:navigate>{{ __('Add Course') }}</flux:navlist.item>
-            </flux:navlist.group>
-            <flux:navlist.group  class="grid">
                 <flux:navlist.item icon="document" :href="route('manager.courses')"
                     :current="request()->routeIs('manager.courses')" wire:navigate>{{ __('Courses') }}</flux:navlist.item>
             </flux:navlist.group>

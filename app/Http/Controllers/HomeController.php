@@ -150,6 +150,11 @@ class HomeController extends Controller
     public function buyCourse(Request $request, Course $course)
     {
         $user = auth()->user();
+
+        if ($user->role != "user") {
+            return redirect()->route("home");
+        }
+
         $email = $user->email;
         $price = $course->price;
         $check = $course->orders()->where("user_id", "=", $user->id)->first() ?? null;
