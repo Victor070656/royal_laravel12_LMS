@@ -216,7 +216,8 @@
 
     <div class="rt-mobile-menu-overlay"></div>
     <!-- scripts -->
-    @vite(['resourses/js/app.js'])
+    
+    <script src="{{ asset('build/assets/app-ACD0L-kl.js') }}"></script>
     <script src="{{ asset('front/assets/js/popper.min.js') }}"></script>
     <script src="{{ asset('front/assets/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('front/assets/js/rt-plugins.js') }}"></script>
