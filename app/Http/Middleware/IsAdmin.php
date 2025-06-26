@@ -18,7 +18,7 @@ class IsAdmin
     {
         // dd(Auth::user()->isAdmin());
         if (Auth::user()->isAdmin() == false) {
-            return redirect(route("login"))->with("error", "Your Are not an admin");
+            return redirect()->intended(route("login"))->with("error", "Your Are not an admin");
             // abort(403, "Your Are not an admin");
         }
         return $next($request);

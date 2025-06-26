@@ -62,15 +62,20 @@
                                 class=" md:w-[56px] md:h-[56px] h-10 w-10 rounded bg-[#F8F8F8] flex flex-col items-center justify-center modal-trigger">
                                 <img src="{{ asset('front/assets/images/svg/search.svg') }}" alt=""></button>
                             <div class=" block   lg:hidden">
-                                <button type="button"
-                                    class=" text-3xl md:w-[56px] h-10 w-10 md:h-[56px] rounded bg-[#F8F8F8] flex flex-col items-center justify-center
+                                <button type="button" class=" text-3xl md:w-[56px] h-10 w-10 md:h-[56px] rounded bg-[#F8F8F8] flex flex-col items-center justify-center
                                                 menu-click">
                                     <iconify-icon icon="cil:hamburger-menu" rotate="180deg"></iconify-icon>
                                 </button>
                             </div>
                             <div class=" hidden lg:block">
                                 @if (auth()->check())
-                                    <a href="{{ route('dashboard') }}" class="btn btn-link">Dashboard</a>
+                                    @if(auth()->user()->isAdmin())
+                                        <a href="{{ route('manager.index') }}" class="btn btn-link">Dashboard</a>
+                                    @elseif(auth()->user()->isInstructor())
+                                        <a href="{{ route('instructor.index') }}" class="btn btn-link">Dashboard</a>
+                                    @else
+                                        <a href="{{ route('dashboard') }}" class="btn btn-link">Dashboard</a>
+                                    @endif
                                 @else
                                     <a href="{{ route('login') }}" class="btn btn-primary py-[15px] px-8 ">Login</a>
                                 @endif
@@ -88,8 +93,7 @@
             </div>
         </div>
     </header>
-    <div
-        class="openmobile-menu fixed top-0 h-screen pt-10 pb-6 bg-white shadow-box2 w-[320px] overflow-y-auto flex flex-col
+    <div class="openmobile-menu fixed top-0 h-screen pt-10 pb-6 bg-white shadow-box2 w-[320px] overflow-y-auto flex flex-col
         z-[999]">
         <div class="flex justify-between px-6 flex-none">
             <a href="index-2.html" class="brand-logo flex-none mr-10 ">
@@ -157,16 +161,14 @@
                         </p>
                         <ul class="flex space-x-4 pt-8">
                             <li>
-                                <a href="#"
-                                    class="flex h-12 w-12 flex-col items-center justify-center rounded bg-white bg-opacity-[0.08] text-2xl text-white
+                                <a href="#" class="flex h-12 w-12 flex-col items-center justify-center rounded bg-white bg-opacity-[0.08] text-2xl text-white
                   transition hover:bg-primary hover:text-white">
                                     <iconify-icon icon="bxl:facebook"></iconify-icon>
                                 </a>
                             </li>
 
                             <li>
-                                <a href="#"
-                                    class="flex h-12 w-12 flex-col items-center justify-center rounded bg-white bg-opacity-[0.08] text-2xl text-white
+                                <a href="#" class="flex h-12 w-12 flex-col items-center justify-center rounded bg-white bg-opacity-[0.08] text-2xl text-white
                   transition hover:bg-primary hover:text-white">
                                     <iconify-icon icon="bxl:instagram"></iconify-icon>
                                 </a>
@@ -216,7 +218,7 @@
 
     <div class="rt-mobile-menu-overlay"></div>
     <!-- scripts -->
-    
+
     <script src="{{ asset('build/assets/app-ACD0L-kl.js') }}"></script>
     <script src="{{ asset('front/assets/js/popper.min.js') }}"></script>
     <script src="{{ asset('front/assets/js/jquery-3.6.0.min.js') }}"></script>

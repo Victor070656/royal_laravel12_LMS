@@ -18,7 +18,7 @@ class IsInstructor
     {
         // dd(Auth::user()->isAdmin());
         if (Auth::user()->isInstructor() == false) {
-            return redirect(route("login"))->with("error", "Your Are not Logged in as an Instructor");
+            return redirect()->intended(route("login"))->with("error", "Your Are not Logged in as an Instructor");
             // abort(403, "Your Are not Logged in as an Instructor");
         }
         return $next($request);
