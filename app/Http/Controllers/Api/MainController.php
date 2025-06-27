@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Mail\OrderPlaced;
 use App\Models\Course;
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 // flutterwave rave
 use EdwardMuss\Rave\Facades\Rave as Flutterwave;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class MainController extends Controller
 {
@@ -38,18 +40,96 @@ class MainController extends Controller
             ])->setStatusCode($th->getCode() ?? 400, "Bad request");
         }
     }
+
+    public function updateProfile(Request $request, $id)
+    {
+        try {
+            $user = User::whereId($id)->first();
+
+            if ($user) {
+                $rules = [
+                    'first_name' => ['required', 'string', 'max:255'],
+                    'last_name' => ['required', 'string', 'max:255'],
+                    'email' => ['required', 'string', 'lowercase', 'email', 'max:255'],
+                    'photo' => ['nullable', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'],
+                    'phone' => ['nullable', 'string', 'max:255'],
+                    'bio' => ['nullable', 'string'],
+                    'gender' => ['nullable', 'string'],
+                    'address' => ['nullable', 'string'],
+                    'city' => ['nullable', 'string'],
+                    'country' => ['nullable', 'string'],
+                    'day' => ['nullable', 'integer'],
+                    'month' => ['nullable', 'string'],
+                    'year' => ['nullable', 'integer'],
+                ];
+
+                $validated = $request->validate($rules);
+
+                // Handle photo upload if present
+                if ($request->hasFile('photo') && $request->file('photo')->isValid()) {
+                    $photo = $request->file('photo');
+
+                    // Ensure the destination folder exists
+                    $destinationPath = public_path('uploads/photos');
+                    if (!file_exists($destinationPath)) {
+                        mkdir($destinationPath, 0755, true);
+                    }
+
+                    // Create a unique filename
+                    $filename = time() . '_' . Str::random(10) . '.' . $photo->getClientOriginalExtension();
+
+                    // Move the file to public/uploads/photos
+                    $photo->move($destinationPath, $filename);
+
+                    // Save path in database (relative to public/)
+                    $validated['photo'] = 'uploads/photos/' . $filename;
+                } else {
+                    // Preserve existing photo if none uploaded
+                    $validated['photo'] = $user->photo;
+                }
+
+                // Update user
+                $user->fill($validated);
+
+                if ($user->isDirty('email')) {
+                    $user->email_verified_at = null;
+                }
+
+                $user->save();
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Profile updated successfully',
+                    'data' => $user
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'User Not Found',
+                ], 404);
+            }
+        } catch (\Exception $th) {
+            //throw $th;
+            return response()->json([
+                'status' => 'error',
+                'message' => $th->getMessage()
+            ], 400);
+        }
+
+    }
+
     public function getCourses(Request $request)
     {
-        $course = Course::latest()->get();
-        $course->load(
-            [
-                'user', // Eager load user and their profile
-                'categories', // Eager load category and its parent category
-                'orders', // Eager load orders and their order items
-                'review' // Assuming 'reviews' is a new relationship on the Course model
-            ]
-        );
         try {
+            $course = Course::latest()->get();
+            $course->load(
+                [
+                    'user', // Eager load user and their profile
+                    'categories', // Eager load category and its parent category
+                    'orders', // Eager load orders and their order items
+                    'review' // Assuming 'reviews' is a new relationship on the Course model
+                ]
+            );
             if ($course->count() > 0) {
                 return response()->json([
                     "status" => "success",
@@ -99,6 +179,32 @@ class MainController extends Controller
                 ]);
             }
         } catch (\Exception $th) {
+            return response()->json([
+                "status" => "error",
+                "message" => $th->getMessage(),
+            ]);
+        }
+    }
+
+    // order
+    public function getOrders($id)
+    {
+        try {
+            $order = Order::where("user_id", "=", $id)->get();
+            if (isset($order) && $order->count() > 0) {
+                return response()->json([
+                    "status" => "success",
+                    "message" => "Orders Found",
+                    "data" => $order
+                ]);
+            } else {
+                return response()->json([
+                    "status" => "error",
+                    "message" => "No Order Found",
+                ])->setStatusCode(404);
+            }
+        } catch (\Exception $th) {
+            //throw $th;
             return response()->json([
                 "status" => "error",
                 "message" => $th->getMessage(),

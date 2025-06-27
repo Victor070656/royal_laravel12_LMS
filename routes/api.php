@@ -13,8 +13,19 @@ Route::post("forgot", [AuthController::class, "forgotPassword"]);
 Route::get("get-courses", [MainController::class, "getCourses"]);
 Route::get("get-course/{id}", [MainController::class, "getSingleCourse"]);
 Route::get("get-user/{id}", [MainController::class, "getUser"]);
+Route::post("update-profile/{id}", [MainController::class, "updateProfile"]);
+Route::get("get-orders/{id}", [MainController::class, "getOrders"]);
 
 
 Route::get("/", function (Request $request) {
     return "It Works";
+});
+
+Route::get('/db-test', function () {
+    try {
+        \DB::connection()->getPdo();
+        return '✅ DB Connected';
+    } catch (\Exception $e) {
+        return '❌ DB Connection failed: ' . $e->getMessage();
+    }
 });
