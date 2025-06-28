@@ -213,6 +213,70 @@ class MainController extends Controller
     }
 
 
+
+
+
+
+    public function buyCourse(Request $request, $courseId, $userId)
+    {
+        $user = User::whereId($userId)->first();
+
+        if (!$user || $user->role !== 'user') {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Unauthorized. Only users can buy courses.',
+            ], 403);
+        }
+
+        $course = Course::find($courseId);
+
+        if (!$course) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Course not found.',
+            ], 404);
+        }
+
+        // Check if already purchased
+        $existingOrder = $course->orders()->where('user_id', $user->id)->first();
+
+        if ($existingOrder) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'You have already purchased this course.',
+            ], 409);
+        }
+
+        $callbackUrl = route('api.verify.payment', ['id' => $userId, "courseId" => $courseId]);
+
+        // Initialize payment with Flutterwave
+        $paymentResponse = $this->payWithFlutter(
+            $user->first_name,
+            $user->last_name,
+            $user->email,
+            $course->price,
+            $callbackUrl
+        );
+
+        if ($paymentResponse['status'] !== 'success') {
+            return response()->json([
+                'status' => 'error',
+                'message' => $paymentResponse['message'],
+                'data' => $paymentResponse['data'] ?? null,
+            ], 500);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Payment link generated successfully.',
+            "data" => [
+                'link' => $paymentResponse['link'],
+                'tx_ref' => $paymentResponse['tx_ref'],
+            ],
+        ]);
+    }
+
+
     public function payWithFlutter($first_name, $last_name, $email, $amount, $callback_url, $currency = "NGN")
     {
         \Log::info('Starting payment process');
@@ -226,108 +290,133 @@ class MainController extends Controller
                 'amount' => $amount,
                 'email' => $email,
                 'tx_ref' => $reference,
-                'currency' => "NGN",
+                'currency' => $currency,
                 'redirect_url' => $callback_url,
                 'customer' => [
                     'email' => $email,
-                    "name" => $first_name . " " . $last_name
+                    'name' => $first_name . " " . $last_name
                 ],
-                "customizations" => [
-                    "title" => 'Royal Educity',
-                    "description" => "Payment for course",
-                ]
+                'customizations' => [
+                    'title' => 'Royal Educity',
+                    'description' => 'Payment for course',
+                ],
             ];
 
             \Log::info('Payment data prepared', $data);
 
             $payment = Flutterwave::initializePayment($data);
             $payment = (array) $payment;
-            \Log::info('Payment response received', $payment);
 
-            // dd($payment);
+            \Log::info('Payment response received', $payment);
 
             if ($payment['status'] !== 'success') {
                 \Log::error('Payment initialization failed', $payment);
-                return back()->with('error', 'Payment initialization failed');
+                return [
+                    'status' => 'error',
+                    'message' => 'Payment initialization failed',
+                    'data' => $payment,
+                ];
             }
 
             $redirectUrl = $payment['data']['link'];
-            \Log::info('Redirecting to: ' . $redirectUrl);
-            // dd($payment);
+            \Log::info('Payment link: ' . $redirectUrl);
 
-
-            // return redirect()->away($redirectUrl, 301);
-            return view("payment.flutterwave", [
-                "url" => $redirectUrl,
-            ]);
+            return [
+                'status' => 'success',
+                'message' => 'Payment link generated',
+                'link' => $redirectUrl,
+                'tx_ref' => $reference,
+            ];
 
         } catch (\Exception $e) {
             \Log::error('Payment error: ' . $e->getMessage());
-            return back()->with('error', 'An error occurred while processing payment');
+            return [
+                'status' => 'error',
+                'message' => 'An error occurred while processing payment',
+                'error' => $e->getMessage(),
+            ];
         }
     }
 
-    public function buyCourse(Request $request, Course $course)
+    public function verifyPayment(Request $request, $id, $courseId)
     {
-        $user = auth()->user();
 
-        if ($user->role != "user") {
-            return redirect()->route("home");
-        }
 
-        $email = $user->email;
-        $price = $course->price;
-        $check = $course->orders()->where("user_id", "=", $user->id)->first() ?? null;
-        if (!$check) {
+        // Verify with Flutterwave
+        try {
+            $transaction_id = $request->query("transaction_id");
+            $tx_ref = $request->query("tx_ref");
 
-            // $this->makePayment($email, $price, route('home.course.pay', $course));
-            // dd(route('home.course.pay', $course));
-            $res = $this->payWithFlutter($user->first_name, $user->last_name, $email, $price, route('home.course.pay', $course));
-            // dd($res);
-            return $res;
-
-        } else {
-            return redirect()->route("home.course.details", $course)->with("error", "Course already bought by you!");
-        }
-    }
-
-    public function payCourse(Request $request, Course $course)
-    {
-        // dd($request);
-        $status = request()->status;
-
-        //if payment is successful
-        if ($status == 'successful') {
-
-            $transactionID = Flutterwave::getTransactionIDFromCallback();
-            $data = Flutterwave::verifyTransaction($transactionID);
-
-            // dd($data);
-            if ($data["status"] == "success") {
-                $order = $course->orders()->create([
-                    "user_id" => auth()->user()->id,
-                    "amount" => $course->price,
-                    "reference" => $request->query('txref')
-                ]);
-                Mail::to([
-                    "support@royalsolutions.com.ng",
-                    "ikechukwuv052@gmail.com",
-                    // $course->user->email
-                ])
-                    ->send(new OrderPlaced($course));
-
-                if ($order) {
-                    return redirect()->route("home.course.details", $course)->with("success", "Payment was successful!");
-                } else {
-                    return redirect()->route("home.course.details", $course)->with("error", "Order Failed!");
-                }
-            } else {
-                return redirect()->route("home.course.details", $course)->with("error", "Order Failed. Something went wrong!");
+            if (!$transaction_id || !$tx_ref) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Missing required parameters: transaction_id or tx_ref',
+                ], 422);
             }
 
-        } else {
-            return redirect()->route("home.course.details", $course)->with("error", "Something went wrong!");
-        }
+            $user = User::whereId($id)->first();
 
+            $course = Course::find($courseId);
+            if (!$course) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Course not found.',
+                ], 404);
+            }
+            $data = Flutterwave::verifyTransaction($transaction_id);
+            \Log::info('Flutterwave verification data: ' . json_encode($data));
+            // dd($data);
+            if ($data['status'] !== 'success') {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Payment verification failed at Flutterwave.',
+                    'data' => $data,
+                ], 400);
+            }
+
+            // Check if already ordered
+            $existingOrder = $course->orders()->where('user_id', $user->id)->first();
+            if ($existingOrder) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Course already purchased.',
+                ], 409);
+            }
+
+            // Create order
+            $order = $course->orders()->create([
+                'user_id' => $user->id,
+                'amount' => $course->price,
+                'reference' => $tx_ref,
+            ]);
+
+            // Send email notification
+            try {
+                Mail::to([
+                    'support@royalsolutions.com.ng',
+                    'ikechukwuv052@gmail.com'
+                ])->send(new OrderPlaced($course));
+            } catch (\Exception $e) {
+                \Log::error('Error sending email: ' . $e->getMessage());
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Payment verified and order created.',
+                'data' => [
+                    'order_id' => $order->id,
+                    'course_id' => $course->id,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Payment verification error: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'An error occurred while verifying payment.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
+
+
 }

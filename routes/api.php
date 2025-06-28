@@ -15,6 +15,8 @@ Route::get("get-course/{id}", [MainController::class, "getSingleCourse"]);
 Route::get("get-user/{id}", [MainController::class, "getUser"]);
 Route::post("update-profile/{id}", [MainController::class, "updateProfile"]);
 Route::get("get-orders/{id}", [MainController::class, "getOrders"]);
+Route::post("buy-course/{courseId}/{userId}", [MainController::class, "buyCourse"]);
+Route::get("verify-payment/{id}/{courseId}", [MainController::class, "verifyPayment"])->name("api.verify.payment");
 
 
 Route::get("/", function (Request $request) {
