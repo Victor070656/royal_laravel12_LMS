@@ -191,6 +191,50 @@ class MainController extends Controller
     {
         try {
             $order = Order::where("user_id", "=", $id)->get();
+            $order->load([
+                "course",
+                "course.user",
+                "course.sections",
+                "course.sections.courseContent",
+                "course.review",
+                "course.review.user",
+                "course.comments",
+                "course.comments.user",
+            ]);
+            if (isset($order) && $order->count() > 0) {
+                return response()->json([
+                    "status" => "success",
+                    "message" => "Orders Found",
+                    "data" => $order
+                ]);
+            } else {
+                return response()->json([
+                    "status" => "error",
+                    "message" => "No Order Found",
+                ])->setStatusCode(404);
+            }
+        } catch (\Exception $th) {
+            //throw $th;
+            return response()->json([
+                "status" => "error",
+                "message" => $th->getMessage(),
+            ]);
+        }
+    }
+    public function getOrder($orderId, $id)
+    {
+        try {
+            $order = Order::whereId($orderId)->where("user_id", "=", $id)->get();
+            $order->load([
+                "course",
+                "course.user",
+                "course.sections",
+                "course.sections.courseContent",
+                "course.review",
+                "course.review.user",
+                "course.comments",
+                "course.comments.user",
+            ]);
             if (isset($order) && $order->count() > 0) {
                 return response()->json([
                     "status" => "success",
@@ -212,7 +256,10 @@ class MainController extends Controller
         }
     }
 
-
+    public function writeReview(Request $request, $courseId, $id)
+    {
+    }
+    
 
 
 
