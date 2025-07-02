@@ -39,7 +39,7 @@
 
                     <p class="font-semibold">Scheme</p>
                     @php
-                        $scheme = explode(',', $course->scheme);
+$scheme = explode(',', $course->scheme);
                     @endphp
                     <ul class="mb-3">
                         @foreach ($scheme as $item)
@@ -48,7 +48,7 @@
                     </ul>
                     <p class="font-semibold">Requirements</p>
                     @php
-                        $requirements = explode(',', $course->requirements);
+$requirements = explode(',', $course->requirements);
                     @endphp
                     <ul class="mb-3">
                         @foreach ($requirements as $item)
@@ -64,8 +64,10 @@
                             <p class="font-semibold">Price</p>
                             <p class="mb-3">₦{{ number_format($course->price) }}</p>
                         </div>
-
-
+                        <div class="">
+                            <p class="font-semibold">Total Orders</p>
+                            <p class="mb-3">{{ number_format($course->orders()->count()) }}</p>
+                        </div>
                     </div>
 
                     {{-- course sections --}}
@@ -162,7 +164,7 @@
                                     <div class="p-4 border-b rounded-xl">
                                         {{-- Review Date --}}
                                         @php
-                                            $reviewDate = Carbon\Carbon::parse($review->created_at);
+                                        $reviewDate = Carbon\Carbon::parse($review->created_at);
                                         @endphp
                                         <div class="flex gap-3">
                                             <small
@@ -199,7 +201,7 @@
                                 @forelse ($course->comments()->latest()->get() as $comment)
                                     <div class="p-4 border-b rounded-xl">
                                         @php
-                                            $commentDate = Carbon\Carbon::parse($comment->created_at);
+        $commentDate = Carbon\Carbon::parse($comment->created_at);
                                         @endphp
                                         <div class="flex gap-3">
                                             <small

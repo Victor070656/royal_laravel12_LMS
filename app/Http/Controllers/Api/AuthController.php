@@ -132,8 +132,7 @@ class AuthController extends Controller
         try {
             // Implement forgot password logic here
             $request->validate([
-                "email" => "required|email",
-                "code" => "required|min:6"
+                "email" => "required|email"
             ]);
             $email = $request->email;
             $findEmail = User::where("email", "=", $email)->count();
@@ -174,34 +173,46 @@ class AuthController extends Controller
 
     public function resetPassword(Request $request)
     {
-        // Implement reset password logic here
         try {
-            //code...
-            $request->validate([
-                "password" => "required|min:8"
+            // Validate input
+            $validated = $request->validate([
+                "email" => "required|email",
+                "password" => "required|min:8",
             ]);
-            $user = User::update([
-                "password" => bcrypt($request->password)
-            ]);
+
+            // Find user by email
+            $user = User::where('email', $validated['email'])->first();
 
             if (!$user) {
                 return response()->json([
                     "status" => "error",
-                    "message" => "Password update failed",
-                ])->setStatusCode(400, "Bad Request");
+                    "message" => "User with this email does not exist",
+                ], 404);
             }
+
+            // Update password
+            $user->password = bcrypt($validated['password']);
+            $user->save();
+
             return response()->json([
                 "status" => "success",
                 "message" => "Password updated successfully",
-                "data" => $user
-            ])->setStatusCode(200, "OK");
-        } catch (\Exception $th) {
-            //throw $th;
+            ], 200);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 "status" => "error",
-                "message" => $th->getMessage(),
-            ])->setStatusCode(400, "Bad Request");
-        }
+                "message" => "Validation failed",
+                "errors" => $e->errors(),
+            ], 422);
 
+        } catch (\Exception $e) {
+            return response()->json([
+                "status" => "error",
+                "message" => "Something went wrong",
+                "error" => $e->getMessage(),
+            ], 500);
+        }
     }
+
 }

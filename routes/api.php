@@ -9,6 +9,8 @@ use App\Http\Controllers\Api\AuthController;
 Route::post("register", [AuthController::class, "register"]);
 Route::post("login", [AuthController::class, "login"]);
 Route::post("forgot", [AuthController::class, "forgotPassword"]);
+Route::post("resend", [AuthController::class, "resendCode"]);
+Route::post("reset", [AuthController::class, "resetPassword"]);
 
 // main
 Route::get("get-courses", [MainController::class, "getCourses"]);
@@ -19,6 +21,8 @@ Route::get("get-orders/{id}", [MainController::class, "getOrders"]);
 Route::get("get-order/{orderId}/{id}", [MainController::class, "getOrder"]);
 Route::post("buy-course/{courseId}/{userId}", [MainController::class, "buyCourse"]);
 Route::get("verify-payment/{id}/{courseId}", [MainController::class, "verifyPayment"])->name("api.verify.payment");
+Route::post("write-review/{courseId}/{id}", [MainController::class, "writeReview"]);
+Route::post("write-comment/{courseId}/{id}", [MainController::class, "writeComment"]);
 
 
 Route::get("/", function (Request $request) {

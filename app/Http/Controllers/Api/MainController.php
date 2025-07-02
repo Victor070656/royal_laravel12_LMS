@@ -258,8 +258,96 @@ class MainController extends Controller
 
     public function writeReview(Request $request, $courseId, $id)
     {
+        try {
+            // Validate input
+            $validated = $request->validate([
+                'star' => 'required',
+                'review' => 'required|string|min:5',
+            ]);
+
+            // Find the course
+            $course = Course::findOrFail($courseId);
+
+            // Create the review
+            $review = $course->review()->create([
+                'user_id' => $id,
+                'star' => $validated['star'],
+                'review' => $validated['review'],
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Review Added',
+                'data' => $review
+            ], 201);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Course not found'
+            ], 404);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Something went wrong',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
-    
+
+    public function writeComment(Request $request, $courseId, $id)
+    {
+        try {
+            // Validate request
+            $validated = $request->validate([
+                'comment' => 'required|string|min:5',
+            ]);
+
+            // Fetch course
+            $course = Course::findOrFail($courseId);
+
+            // Create comment
+            $comment = $course->comments()->create([
+                'user_id' => $id,
+                'comment' => $validated['comment'],
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Comment added successfully',
+                'data' => $comment,
+            ], 201);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Course not found'
+            ], 404);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Something went wrong',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 
 
 

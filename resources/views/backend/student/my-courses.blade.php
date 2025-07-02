@@ -15,12 +15,13 @@
                             <div class="p-4">
                                 <h4 class="text-lg font-semibold truncate">{{ $order->course->course_name }}</h4>
                                 <p class="font-medium text-sm">By:
-                                    {{ $order->course->user->first_name . ' ' . $order->course->user->last_name }}</p>
+                                    {{ $order->course->user->first_name . ' ' . $order->course->user->last_name }}
+                                </p>
                             </div>
                         </a>
                     </div>
                 @empty
-                    <div class="col-span-3 text-center">
+                    <div class="col-span-3 text-center py-6">
                         <p>You have to purchase a course to see it here</p>
                     </div>
                 @endforelse
