@@ -262,7 +262,7 @@ class MainController extends Controller
             // Validate input
             $validated = $request->validate([
                 'star' => 'required',
-                'review' => 'required|string|min:5',
+                'review' => 'required|string',
             ]);
 
             // Find the course
@@ -308,7 +308,7 @@ class MainController extends Controller
         try {
             // Validate request
             $validated = $request->validate([
-                'comment' => 'required|string|min:5',
+                'comment' => 'required|string',
             ]);
 
             // Fetch course
